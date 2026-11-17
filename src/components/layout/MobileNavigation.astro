@@ -1,0 +1,129 @@
+---
+import { isCurrentPage } from './isCurrentPage';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { routes } from '@/config/routes';
+import { business, phoneHref } from '@/data/business';
+import type { NavItem } from '@/types/navigation';
+
+/**
+ * Mobile menu. Built on the native <details> element so it opens and closes
+ * without JavaScript; `mobileMenu.ts` adds Escape and click-outside closing.
+ */
+interface Props {
+  items: NavItem[];
+}
+
+const { items } = Astro.props;
+const { pathname } = Astro.url;
+---
+
+<details class="mobile-nav" data-mobile-menu>
+  <summary class="mobile-nav__toggle" aria-label="Menu">
+    <span class="mobile-nav__icon mobile-nav__icon--open">
+      <Icon name="menu" size={26} />
+    </span>
+    <span class="mobile-nav__icon mobile-nav__icon--close">
+      <Icon name="close" size={26} />
+    </span>
+  </summary>
+  <nav class="mobile-nav__panel" aria-label="Mobile">
+    {items.map((item) => (
+      <a
+        class="mobile-nav__link"
+        href={item.href}
+        aria-current={isCurrentPage(item.href, pathname) ? 'page' : undefined}
+      >
+        {item.label} <Icon name="chevron-right" />
+      </a>
+    ))}
+    <div class="mobile-nav__actions">
+      <Button variant="light" href={routes.inventory}>
+        Browse Inventory
+      </Button>
+      <Button variant="outline-light" href={phoneHref} iconStart="phone">
+        Call {business.owner.firstName} · {business.phone.display}
+      </Button>
+    </div>
+  </nav>
+</details>
+
+<script>
+  import { initMobileMenu } from '@/scripts/mobileMenu';
+  initMobileMenu();
+</script>
+
+<style>
+  .mobile-nav__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--touch-target);
+    height: var(--touch-target);
+    border-radius: 0.625rem;
+    color: var(--color-white);
+    cursor: pointer;
+    list-style: none;
+    transition: background-color var(--duration-fast) var(--ease);
+  }
+
+  .mobile-nav__toggle::-webkit-details-marker {
+    display: none;
+  }
+
+  .mobile-nav__toggle:hover {
+    background: rgb(255 255 255 / 0.12);
+  }
+
+  .mobile-nav__icon {
+    display: flex;
+  }
+
+  .mobile-nav__icon--close,
+  .mobile-nav[open] .mobile-nav__icon--open {
+    display: none;
+  }
+
+  .mobile-nav[open] .mobile-nav__icon--close {
+    display: flex;
+  }
+
+  /* Positioned against the header, which is the nearest positioned ancestor. */
+  .mobile-nav__panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-1) var(--space-5) var(--space-6);
+    background: var(--color-navy);
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+    box-shadow: var(--shadow-menu);
+  }
+
+  .mobile-nav__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 3.625rem;
+    border-bottom: 1px solid rgb(255 255 255 / 0.12);
+    font-size: 1.25rem;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: -0.015em;
+    color: var(--color-white);
+    text-decoration: none;
+  }
+
+  .mobile-nav__link:hover,
+  .mobile-nav__link[aria-current='page'] {
+    color: var(--color-brass-pale);
+  }
+
+  .mobile-nav__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    margin-top: var(--space-5);
+  }
+</style>

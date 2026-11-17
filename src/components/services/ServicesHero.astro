@@ -1,0 +1,36 @@
+---
+import PageHero from '@/components/sections/PageHero.astro';
+import Chip from '@/components/ui/Chip.astro';
+import { routes } from '@/config/routes';
+import type { Service } from '@/types/service';
+
+/** Services page header with jump links to each service. */
+interface Props {
+  services: Service[];
+}
+
+const { services } = Astro.props;
+---
+
+<PageHero
+  heading="Gunsmithing & Repairs"
+  description="Alongside firearm sales, Brock Guns and Repair offers gunsmithing and repair services. Not sure which you need? Call David and describe what is going on."
+  breadcrumbs={[{ label: 'Home', href: routes.home }, { label: 'Gunsmithing & Repairs' }]}
+>
+  <div class="services-hero__links">
+    {services.map((service) => (
+      <Chip variant="on-dark" href={`#${service.id}`}>
+        {service.title}
+      </Chip>
+    ))}
+  </div>
+</PageHero>
+
+<style>
+  .services-hero__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding-top: 0.375rem;
+  }
+</style>

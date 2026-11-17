@@ -1,0 +1,39 @@
+---
+/**
+ * Two-panel contact layout: the info panel and the form wrap onto separate
+ * rows on small screens and sit side by side when there is room.
+ */
+---
+
+<div class="contact-split">
+  <div class="contact-split__info">
+    <slot name="info" />
+  </div>
+  <div class="contact-split__form">
+    <slot name="form" />
+  </div>
+</div>
+
+<style>
+  .contact-split {
+    display: flex;
+    flex-wrap: wrap;
+    background: var(--color-ivory);
+  }
+
+  .contact-split__info {
+    flex: 1 1 23.75rem;
+    min-width: 0;
+    display: flex;
+    background: var(--color-navy);
+  }
+
+  .contact-split__info > :global(*) {
+    flex: 1;
+  }
+
+  .contact-split__form {
+    flex: 1.4 1 28.75rem;
+    min-width: 0;
+  }
+</style>

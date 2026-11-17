@@ -1,0 +1,142 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import Icon from './Icon.astro';
+import type { IconName } from './icons';
+
+/**
+ * The one button for the whole site.
+ * Renders an <a> when `href` is set (navigation), a <button> otherwise
+ * (actions), or a <span> when it only decorates a larger link.
+ */
+type Variant = 'primary' | 'light' | 'outline' | 'outline-light';
+type Size = 'md' | 'sm';
+
+interface Props extends Omit<HTMLAttributes<'a'> & HTMLAttributes<'button'>, 'type' | 'size'> {
+  /**
+   * primary: navy fill (light backgrounds) · light: ivory fill (navy backgrounds)
+   * outline: navy outline · outline-light: white outline (navy backgrounds)
+   */
+  variant?: Variant;
+  size?: Size;
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  iconStart?: IconName;
+  iconEnd?: IconName;
+  /** Render a non-interactive <span> (when nested inside another link). */
+  decorative?: boolean;
+}
+
+const {
+  variant = 'primary',
+  size = 'md',
+  href,
+  type = 'button',
+  iconStart,
+  iconEnd,
+  decorative = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const Element = decorative ? 'span' : href ? 'a' : 'button';
+const elementProps = decorative ? {} : href ? { href } : { type };
+---
+
+<Element
+  class:list={['button', `button--${variant}`, `button--${size}`, className]}
+  {...elementProps}
+  {...rest}
+>
+  {iconStart && <Icon name={iconStart} />}
+  <slot />
+  {iconEnd && <Icon name={iconEnd} />}
+</Element>
+
+<style>
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: 3.25rem;
+    padding: 0 1.625rem;
+    font-family: inherit;
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1;
+    letter-spacing: -0.005em;
+    text-decoration: none;
+    white-space: nowrap;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    transition:
+      background-color var(--duration-fast) var(--ease),
+      color var(--duration-fast) var(--ease),
+      border-color var(--duration-fast) var(--ease),
+      transform var(--duration-fast) var(--ease);
+  }
+
+  .button:active {
+    transform: scale(0.97);
+  }
+
+  .button--sm {
+    min-height: var(--touch-target);
+    padding: 0 1.125rem;
+    font-size: var(--text-base-sm);
+  }
+
+  .button--primary {
+    background: var(--color-navy);
+    border-color: var(--color-navy);
+    color: var(--color-white);
+  }
+
+  .button--primary:hover {
+    background: var(--color-navy-hover);
+    border-color: var(--color-navy-hover);
+    color: var(--color-white);
+  }
+
+  .button--light {
+    background: var(--color-ivory);
+    border-color: var(--color-ivory);
+    color: var(--color-navy);
+  }
+
+  .button--light:hover {
+    background: var(--color-white);
+    border-color: var(--color-white);
+    color: var(--color-navy);
+  }
+
+  .button--outline {
+    background: transparent;
+    border-color: var(--color-navy);
+    color: var(--color-navy);
+  }
+
+  .button--outline:hover {
+    background: rgb(20 35 52 / 0.07);
+    color: var(--color-navy);
+  }
+
+  .button--outline-light {
+    background: transparent;
+    border-color: rgb(255 255 255 / 0.55);
+    color: var(--color-white);
+  }
+
+  .button--outline-light:hover {
+    background: rgb(255 255 255 / 0.1);
+    border-color: var(--color-white);
+    color: var(--color-white);
+  }
+
+  .button:disabled,
+  .button[aria-disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+</style>

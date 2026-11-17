@@ -1,0 +1,15 @@
+---
+import InventoryBrowser from '@/components/products/InventoryBrowser.astro';
+import PageLayout from '@/layouts/PageLayout.astro';
+import { productRepository } from '@/lib/products/productRepository';
+
+const products = await productRepository.listProducts();
+const categories = await productRepository.listCategories();
+---
+
+<PageLayout
+  title="Inventory"
+  description="Browse inventory information from Brock Guns and Repair, then call or message David Johnson about anything that interests you."
+>
+  <InventoryBrowser products={products} categories={categories} />
+</PageLayout>

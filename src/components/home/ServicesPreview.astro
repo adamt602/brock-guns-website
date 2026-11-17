@@ -1,0 +1,38 @@
+---
+import ServiceCard from '@/components/services/ServiceCard.astro';
+import Grid from '@/components/ui/Grid.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import type { Service } from '@/types/service';
+
+/** Secondary services teaser. Deliberately quieter than the inventory sections. */
+interface Props {
+  services: Service[];
+}
+
+const { services } = Astro.props;
+---
+
+<Section tone="ivory" space="md" aria-labelledby="services-preview-heading">
+  <div class="services-preview">
+    <SectionHeading
+      id="services-preview-heading"
+      eyebrow="Also at Brock"
+      heading="Gunsmithing & Repairs"
+      size="h3"
+    />
+    <Grid columns={2}>
+      {services.map((service) => (
+        <ServiceCard service={service} />
+      ))}
+    </Grid>
+  </div>
+</Section>
+
+<style>
+  .services-preview {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+</style>

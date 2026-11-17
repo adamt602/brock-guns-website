@@ -1,0 +1,53 @@
+---
+import Pending from '@/components/ui/Pending.astro';
+import Photo from '@/components/ui/Photo.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import Split from '@/components/ui/Split.astro';
+import TextLink from '@/components/ui/TextLink.astro';
+import { routes } from '@/config/routes';
+import { business } from '@/data/business';
+import { meetOwner } from '@/data/home';
+import { isPending } from '@/types/content';
+
+/** Introduces the owner with a portrait and a short personal note. */
+const { story } = meetOwner;
+---
+
+<Section tone="stone" aria-labelledby="owner-heading">
+  <Split>
+    <Photo
+      class="meet-owner__portrait"
+      label="Portrait"
+      brief={`Real photo of ${business.owner.name} to be supplied`}
+      tone="stone"
+      icon="user"
+    />
+    <div class="meet-owner__content">
+      <SectionHeading
+        id="owner-heading"
+        eyebrow={meetOwner.eyebrow}
+        heading={meetOwner.heading}
+        display
+      />
+      <p class="text-lede">{meetOwner.lede}</p>
+      <p>{isPending(story) ? <Pending note={story.note} /> : story}</p>
+      <TextLink href={routes.about} iconEnd="arrow-right">
+        {meetOwner.linkLabel}
+      </TextLink>
+    </div>
+  </Split>
+</Section>
+
+<style>
+  .meet-owner__portrait {
+    height: clamp(17.5rem, 36vw, 28.75rem);
+  }
+
+  .meet-owner__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.875rem;
+  }
+</style>

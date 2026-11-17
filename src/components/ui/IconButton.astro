@@ -1,0 +1,73 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import Icon from './Icon.astro';
+import type { IconName } from './icons';
+
+/** A 44px icon-only control. `label` is required for screen readers. */
+interface Props extends Omit<HTMLAttributes<'a'> & HTMLAttributes<'button'>, 'type'> {
+  icon: IconName;
+  label: string;
+  href?: string;
+  /** on-dark: white icon for navy surfaces · light: navy icon on a stone disc */
+  tone?: 'on-dark' | 'light';
+  iconSize?: number;
+}
+
+const {
+  icon,
+  label,
+  href,
+  tone = 'on-dark',
+  iconSize = 24,
+  class: className,
+  ...rest
+} = Astro.props;
+const Element = href ? 'a' : 'button';
+const elementProps = href ? { href } : { type: 'button' as const };
+---
+
+<Element
+  class:list={['icon-button', `icon-button--${tone}`, className]}
+  aria-label={label}
+  {...elementProps}
+  {...rest}
+>
+  <Icon name={icon} size={iconSize} />
+</Element>
+
+<style>
+  .icon-button {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: var(--touch-target);
+    height: var(--touch-target);
+    padding: 0;
+    border: 0;
+    border-radius: 0.625rem;
+    background: transparent;
+    cursor: pointer;
+    transition: background-color var(--duration-fast) var(--ease);
+  }
+
+  .icon-button--on-dark {
+    color: var(--color-white);
+  }
+
+  .icon-button--on-dark:hover {
+    background: rgb(255 255 255 / 0.12);
+    color: var(--color-white);
+  }
+
+  .icon-button--light {
+    color: var(--color-navy);
+    background: var(--color-stone);
+    border-radius: var(--radius-pill);
+  }
+
+  .icon-button--light:hover {
+    background: var(--color-border);
+    color: var(--color-navy);
+  }
+</style>

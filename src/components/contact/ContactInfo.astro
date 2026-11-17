@@ -1,0 +1,127 @@
+---
+import CallButton from './CallButton.astro';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
+import Icon from '@/components/ui/Icon.astro';
+import type { IconName } from '@/components/ui/icons';
+import Pending from '@/components/ui/Pending.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { routes } from '@/config/routes';
+import { business, phoneHref } from '@/data/business';
+import { isPending, type Verifiable } from '@/types/content';
+
+/** Navy contact panel: headline, phone number and business facts. */
+const { owner, phone, region, address, hours } = business;
+
+const facts: { icon: IconName; label: string; lead?: string; value: Verifiable<string> }[] = [
+  { icon: 'user', label: 'Owner', value: owner.name },
+  { icon: 'pin', label: 'Location', lead: region, value: address },
+  { icon: 'clock', label: 'Hours', value: hours },
+];
+---
+
+<section class="contact-info" aria-labelledby="page-heading">
+  <div class="contact-info__inner">
+    <Breadcrumbs items={[{ label: 'Home', href: routes.home }, { label: 'Contact' }]} tone="dark" />
+    <SectionHeading
+      id="page-heading"
+      level="h1"
+      size="h1"
+      display
+      tone="dark"
+      eyebrow="Contact"
+      heading={`Talk to ${owner.firstName}`}
+    />
+    <p class="contact-info__lede">
+      The quickest way to get an answer is a phone call. Prefer to write? Use the form and include
+      as much detail as you like.
+    </p>
+    <a class="contact-info__phone tabular-nums" href={phoneHref}>
+      {phone.display}
+    </a>
+    <CallButton variant="light" label={`Call ${owner.firstName} now`} />
+
+    <dl class="contact-info__facts">
+      {facts.map((fact) => (
+        <div class="contact-info__fact">
+          <dt class="text-eyebrow contact-info__label">
+            <span class="contact-info__icon">
+              <Icon name={fact.icon} size={20} />
+            </span>
+            {fact.label}
+          </dt>
+          <dd class="contact-info__value">
+            {fact.lead} {isPending(fact.value) ? <Pending note={fact.value.note} /> : fact.value}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<style>
+  .contact-info {
+    background: var(--color-navy);
+    color: var(--color-ivory);
+  }
+
+  .contact-info__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-5);
+    max-width: 35rem;
+    margin-left: auto;
+    padding: clamp(3rem, 6vw, 5.5rem) clamp(1.25rem, 5vw, 3.5rem);
+  }
+
+  .contact-info__lede {
+    font-size: var(--text-lg);
+    color: var(--color-on-dark-muted);
+  }
+
+  .contact-info__phone {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch-target);
+    font-size: clamp(2rem, 1.4vw + 1.625rem, 2.75rem);
+    line-height: 1.15;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: -0.03em;
+    color: var(--color-white);
+    text-decoration: none;
+  }
+
+  .contact-info__phone:hover {
+    color: var(--color-brass-pale);
+  }
+
+  .contact-info__facts {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: var(--space-3);
+    border-top: 1px solid rgb(244 238 225 / 0.18);
+  }
+
+  .contact-info__fact {
+    position: relative;
+    padding: var(--space-4) 0 var(--space-4) 2.125rem;
+    border-bottom: 1px solid rgb(244 238 225 / 0.18);
+  }
+
+  .contact-info__icon {
+    position: absolute;
+    left: 0;
+    top: 1.125rem;
+    color: var(--color-brass-light);
+  }
+
+  .contact-info__label {
+    font-size: var(--text-xs);
+    color: var(--color-on-dark-soft);
+  }
+
+  .contact-info__value {
+    margin-top: var(--space-1);
+  }
+</style>

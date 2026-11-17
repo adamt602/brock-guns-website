@@ -1,0 +1,19 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+/** Single-line text input. Pair with FormField for the label and error. */
+interface Props extends HTMLAttributes<'input'> {
+  id: string;
+  /** True when the surrounding FormField has an error message. */
+  hasError?: boolean;
+}
+
+const { id, hasError = false, class: className, ...rest } = Astro.props;
+---
+
+<input
+  id={id}
+  class:list={['control', className]}
+  aria-describedby={hasError ? `${id}-error` : undefined}
+  {...rest}
+/>

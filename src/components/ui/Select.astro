@@ -1,0 +1,78 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import Icon from './Icon.astro';
+
+export interface SelectOption {
+  value: string;
+  label: string;
+}
+
+/**
+ * Native <select>.
+ * field: full-width form control · inline: borderless toolbar control
+ */
+interface Props extends HTMLAttributes<'select'> {
+  options: SelectOption[];
+  variant?: 'field' | 'inline';
+  hasError?: boolean;
+}
+
+const { id, options, variant = 'field', hasError = false, class: className, ...rest } = Astro.props;
+---
+
+{variant === 'field' ? (
+  <select
+    id={id}
+    class:list={['control', className]}
+    aria-describedby={hasError && id ? `${id}-error` : undefined}
+    {...rest}
+  >
+    {options.map((option) => (
+      <option value={option.value}>{option.label}</option>
+    ))}
+  </select>
+) : (
+  <span class:list={['inline-select', className]}>
+    <select id={id} class="inline-select__control" {...rest}>
+      {options.map((option) => (
+        <option value={option.value}>{option.label}</option>
+      ))}
+    </select>
+    <Icon name="chevron-down" size={16} class="inline-select__icon" />
+  </span>
+)}
+
+<style>
+  .inline-select {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .inline-select__control {
+    appearance: none;
+    min-height: var(--touch-target);
+    padding: 0 1.375rem 0 0;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    font-family: inherit;
+    font-size: var(--text-base-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-navy);
+    cursor: pointer;
+  }
+
+  .inline-select__control:hover {
+    color: var(--color-brass-dark);
+  }
+
+  .inline-select :global(.inline-select__icon) {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    margin-top: -8px;
+    color: var(--color-navy);
+    pointer-events: none;
+  }
+</style>

@@ -1,0 +1,54 @@
+---
+import Pending from '@/components/ui/Pending.astro';
+import { business, phoneHref } from '@/data/business';
+import { isPending } from '@/types/content';
+
+/** Contact column of the footer, driven entirely by business data. */
+const { owner, phone, region, address, hours } = business;
+---
+
+<div class="footer-contact">
+  <p class="text-eyebrow footer-contact__heading">Contact</p>
+  <span class="footer-contact__owner">
+    {owner.name}, {owner.title}
+  </span>
+  <a class="footer-contact__phone tabular-nums" href={phoneHref}>
+    {phone.display}
+  </a>
+  <span>{region}</span>
+  <span>{isPending(address) ? <Pending note={address.note} /> : address}</span>
+  <span>{isPending(hours) ? <Pending note={hours.note} /> : hours}</span>
+</div>
+
+<style>
+  .footer-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    font-size: var(--text-base);
+  }
+
+  .footer-contact__heading {
+    margin-bottom: var(--space-2);
+    color: var(--color-brass-light);
+  }
+
+  .footer-contact__owner {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-white);
+  }
+
+  .footer-contact__phone {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch-target);
+    font-size: 1.25rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-on-dark-link);
+    text-decoration: none;
+  }
+
+  .footer-contact__phone:hover {
+    color: var(--color-brass-pale);
+  }
+</style>

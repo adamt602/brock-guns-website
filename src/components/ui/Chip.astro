@@ -1,0 +1,89 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import Icon from './Icon.astro';
+import type { IconName } from './icons';
+
+/**
+ * A pill used for filters and quick links.
+ * With `href` it is a link; otherwise a toggle button (`pressed`).
+ */
+interface Props extends Omit<HTMLAttributes<'a'> & HTMLAttributes<'button'>, 'type'> {
+  href?: string;
+  pressed?: boolean;
+  /** default: white pill · on-dark: outline on navy · compact: small stone pill */
+  variant?: 'default' | 'on-dark' | 'compact';
+  iconEnd?: IconName;
+}
+
+const { href, pressed, variant = 'default', iconEnd, class: className, ...rest } = Astro.props;
+const Element = href ? 'a' : 'button';
+const elementProps = href
+  ? { href }
+  : { type: 'button' as const, 'aria-pressed': pressed === undefined ? undefined : pressed };
+---
+
+<Element class:list={['chip', `chip--${variant}`, className]} {...elementProps} {...rest}>
+  <slot />
+  {iconEnd && <Icon name={iconEnd} size={14} />}
+</Element>
+
+<style>
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: var(--touch-target);
+    padding: 0 1.125rem;
+    font-family: inherit;
+    font-size: var(--text-base-sm);
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+    text-decoration: none;
+    color: var(--color-text);
+    background: var(--color-white);
+    border: 1.5px solid var(--color-border-strong);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    transition:
+      background-color var(--duration-fast) var(--ease),
+      color var(--duration-fast) var(--ease),
+      border-color var(--duration-fast) var(--ease),
+      transform var(--duration-fast) var(--ease);
+  }
+
+  .chip:hover {
+    border-color: var(--color-navy);
+    color: var(--color-navy);
+  }
+
+  .chip:active {
+    transform: scale(0.96);
+  }
+
+  .chip[aria-pressed='true'] {
+    background: var(--color-navy);
+    border-color: var(--color-navy);
+    color: var(--color-white);
+  }
+
+  .chip--on-dark {
+    background: transparent;
+    color: var(--color-white);
+    border-color: rgb(255 255 255 / 0.45);
+  }
+
+  .chip--on-dark:hover {
+    color: var(--color-white);
+    border-color: var(--color-white);
+    background: rgb(255 255 255 / 0.1);
+  }
+
+  .chip--compact {
+    min-height: 2.25rem;
+    padding: 0 0.75rem 0 0.875rem;
+    font-size: var(--text-md);
+    background: var(--color-stone);
+    border-color: var(--color-stone);
+  }
+</style>

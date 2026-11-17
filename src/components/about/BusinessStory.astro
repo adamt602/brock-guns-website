@@ -1,0 +1,85 @@
+---
+import Pending from '@/components/ui/Pending.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import StarIcon from '@/components/ui/StarIcon.astro';
+import { businessStory } from '@/data/about';
+import { isPending } from '@/types/content';
+
+/** "About Brock Guns and Repair": heading column beside the story copy. */
+const { story } = businessStory;
+---
+
+<Section tone="ivory" aria-labelledby="business-heading">
+  <div class="business-story">
+    <div class="business-story__heading">
+      <div class="business-story__ornament" aria-hidden="true">
+        <span></span>
+        <StarIcon />
+        <span></span>
+      </div>
+      <SectionHeading
+        id="business-heading"
+        eyebrow={businessStory.eyebrow}
+        heading={businessStory.heading}
+      />
+    </div>
+    <div class="business-story__body">
+      {businessStory.paragraphs.map((paragraph) => (
+        <p>{paragraph}</p>
+      ))}
+      <p class="business-story__pending">
+        {isPending(story) ? <Pending note={story.note} /> : story}
+      </p>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .business-story {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(1.75rem, 5vw, 5rem);
+  }
+
+  .business-story__heading {
+    flex: 1 1 20rem;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  .business-story__heading :global(.section-heading__title) {
+    color: var(--color-navy);
+  }
+
+  .business-story__ornament {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--color-brass);
+  }
+
+  .business-story__ornament span {
+    display: block;
+    width: 2.5rem;
+    height: 1px;
+    background: currentColor;
+  }
+
+  .business-story__body {
+    flex: 1.4 1 27.5rem;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.125rem;
+    font-size: var(--text-lg);
+    color: var(--color-text-soft);
+  }
+
+  .business-story__pending {
+    font-size: var(--text-body);
+  }
+</style>

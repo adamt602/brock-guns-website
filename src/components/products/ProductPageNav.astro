@@ -1,0 +1,46 @@
+---
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
+import TextLink from '@/components/ui/TextLink.astro';
+import { categoryRoute, routes } from '@/config/routes';
+import type { Product } from '@/types/product';
+
+/** Back link (all sizes) and full breadcrumb trail (tablet and up). */
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+const crumbs = [
+  { label: 'Home', href: routes.home },
+  { label: 'Inventory', href: routes.inventory },
+  { label: product.category.label, href: categoryRoute(product.category.id) },
+  { label: product.name },
+];
+---
+
+<div class="product-nav">
+  <TextLink href={routes.inventory} underline={false} iconStart="chevron-left">
+    Inventory
+  </TextLink>
+  <Breadcrumbs class="product-nav__crumbs" items={crumbs} />
+</div>
+
+<style>
+  .product-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 var(--space-6);
+  }
+
+  .product-nav__crumbs {
+    display: none;
+  }
+
+  @media (min-width: 700px) {
+    .product-nav__crumbs {
+      display: block;
+    }
+  }
+</style>

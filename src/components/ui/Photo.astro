@@ -1,0 +1,115 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Icon from './Icon.astro';
+import type { IconName } from './icons';
+
+/**
+ * A photograph slot. Until a real image is supplied it renders a labelled
+ * placeholder describing the photo that belongs there; pass `image` to swap
+ * in the optimized real photo with no other changes.
+ */
+export interface SitePhoto {
+  src: ImageMetadata;
+  alt: string;
+}
+
+interface Props {
+  image?: SitePhoto | null;
+  /** Placeholder title, e.g. "Portrait". */
+  label: string;
+  /** Placeholder description of the intended photograph. */
+  brief: string;
+  tone?: 'light' | 'stone' | 'dark';
+  icon?: IconName;
+  /** `sizes` attribute for the real image. */
+  sizes?: string;
+  /** Load eagerly (use for above-the-fold images only). */
+  priority?: boolean;
+  class?: string;
+}
+
+const {
+  image,
+  label,
+  brief,
+  tone = 'light',
+  icon,
+  sizes = '(min-width: 900px) 50vw, 100vw',
+  priority = false,
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+{image ? (
+  <Image
+    class:list={['photo', 'photo--image', className]}
+    src={image.src}
+    alt={image.alt}
+    widths={[480, 800, 1200]}
+    sizes={sizes}
+    loading={priority ? 'eager' : 'lazy'}
+    {...rest}
+  />
+) : (
+  <div class:list={['photo', 'photo--placeholder', `photo--${tone}`, className]} {...rest}>
+    {icon && <Icon name={icon} size={36} />}
+    <span>{label} · placeholder</span>
+    <span class="photo__brief">{brief}</span>
+  </div>
+)}
+
+<style>
+  .photo {
+    width: 100%;
+    border-radius: var(--radius-xl);
+  }
+
+  .photo--image {
+    object-fit: cover;
+  }
+
+  .photo--placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    padding: var(--space-5);
+    text-align: center;
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-soft);
+    background-color: var(--color-surface-placeholder);
+    background-image: repeating-linear-gradient(
+      135deg,
+      rgb(20 35 52 / 0.05) 0 1px,
+      transparent 1px 14px
+    );
+  }
+
+  .photo--stone {
+    background-color: var(--color-border);
+  }
+
+  .photo--dark {
+    color: var(--color-on-dark-muted);
+    background-color: var(--color-navy-raised);
+    background-image: repeating-linear-gradient(
+      135deg,
+      rgb(255 255 255 / 0.05) 0 1px,
+      transparent 1px 14px
+    );
+  }
+
+  .photo__brief {
+    font-size: var(--text-md);
+    font-weight: var(--font-weight-regular);
+    letter-spacing: 0;
+    text-transform: none;
+  }
+</style>

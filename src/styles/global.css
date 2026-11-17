@@ -1,0 +1,67 @@
+@import './reset.css';
+@import './tokens.css';
+@import './typography.css';
+@import './utilities.css';
+@import './forms.css';
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--space-6);
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-body);
+  color: var(--color-text);
+  background: var(--color-ivory);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--color-navy);
+  transition: color var(--duration-fast) var(--ease);
+}
+
+a:hover {
+  color: var(--color-brass-dark);
+}
+
+/* One focus treatment for every interactive element. */
+:focus-visible {
+  outline: 2px solid var(--color-navy);
+  outline-offset: 2px;
+  box-shadow: var(--focus-ring);
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--space-4);
+  top: var(--space-4);
+  z-index: 100;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-pill);
+  background: var(--color-ivory);
+  color: var(--color-navy);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

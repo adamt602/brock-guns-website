@@ -1,0 +1,124 @@
+---
+import AvailabilityBadge from './AvailabilityBadge.astro';
+import DemoTag from './DemoTag.astro';
+import ProductImage from './ProductImage.astro';
+import ProductMetadata from './ProductMetadata.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { formatProductPrice } from '@/lib/products/productLabels';
+import type { Product } from '@/types/product';
+
+/**
+ * The single product card used everywhere products are listed.
+ * It only presents the `product` it is given; it never fetches data.
+ */
+interface Props {
+  product: Product;
+  /** Heading element for the product name, to fit the page outline. */
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { product, headingLevel = 'h3' } = Astro.props;
+---
+
+<article class="product-card" data-availability={product.availability}>
+  <ProductImage image={product.images[0]} class="product-card__image">
+    {product.isDemo && <DemoTag />}
+    <AvailabilityBadge availability={product.availability} />
+  </ProductImage>
+  <div class="product-card__body">
+    <ProductMetadata product={product} headingLevel={headingLevel} />
+    <div class="product-card__footer">
+      <span class="product-card__price">{formatProductPrice(product)}</span>
+      <span class="product-card__action" aria-hidden="true">
+        View Details <Icon name="chevron-right" size={16} />
+      </span>
+    </div>
+  </div>
+</article>
+
+<style>
+  .product-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    transition:
+      transform var(--duration-base) var(--ease),
+      box-shadow var(--duration-base) var(--ease),
+      border-color var(--duration-base) var(--ease);
+  }
+
+  .product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: var(--color-border-strong);
+  }
+
+  .product-card:active {
+    transform: scale(0.985);
+    box-shadow: none;
+  }
+
+  /* The stretched link has no visible box, so the card shows its focus ring. */
+  .product-card:has(:global(a:focus-visible)) {
+    outline: 2px solid var(--color-navy);
+    outline-offset: 2px;
+    box-shadow: var(--focus-ring);
+  }
+
+  .product-card :global(.product-image__placeholder),
+  .product-card :global(.product-image__photo) {
+    transition: transform var(--duration-slow) var(--ease);
+  }
+
+  .product-card:hover :global(.product-image__placeholder),
+  .product-card:hover :global(.product-image__photo) {
+    transform: scale(1.05);
+  }
+
+  /* Sold items are dimmed. The placeholder label keeps full contrast (WCAG AA). */
+  .product-card[data-availability='sold'] :global(.product-image__placeholder .icon),
+  .product-card[data-availability='sold'] :global(.product-image__photo) {
+    opacity: 0.45;
+  }
+
+  .product-card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.375rem;
+    padding: var(--space-4) var(--space-5) var(--space-5);
+  }
+
+  .product-card__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-1) var(--space-3);
+    margin-top: auto;
+    padding-top: var(--space-3);
+  }
+
+  .product-card__price {
+    font-size: var(--text-body);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .product-card__action {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    font-size: var(--text-base-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-navy);
+  }
+
+  .product-card:hover .product-card__action {
+    color: var(--color-brass-dark);
+  }
+</style>

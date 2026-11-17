@@ -1,0 +1,158 @@
+---
+import Button from '@/components/ui/Button.astro';
+import Chip from '@/components/ui/Chip.astro';
+import IconButton from '@/components/ui/IconButton.astro';
+import { ANY, availabilityOptions, conditionOptions } from '@/lib/products/filterOptions';
+import type { Category } from '@/types/product';
+
+/**
+ * Bottom-sheet filter dialog for small screens. A native <dialog> provides
+ * the focus trap, Escape key and backdrop. Choices are drafts until "Show
+ * N items" is pressed.
+ */
+interface Props {
+  categories: Category[];
+}
+
+const { categories } = Astro.props;
+const groups = [
+  {
+    key: 'category',
+    label: 'Category',
+    options: [
+      { value: ANY, label: 'All' },
+      ...categories.map((c) => ({ value: c.id, label: c.label })),
+    ],
+  },
+  { key: 'condition', label: 'Condition', options: conditionOptions },
+  { key: 'availability', label: 'Availability', options: availabilityOptions },
+];
+---
+
+<dialog class="filter-sheet" aria-labelledby="filter-sheet-heading" data-filter-sheet>
+  <div class="filter-sheet__panel">
+    <span class="filter-sheet__grip" aria-hidden="true"></span>
+    <div class="filter-sheet__header">
+      <h2 id="filter-sheet-heading" class="filter-sheet__heading">
+        Filters
+      </h2>
+      <IconButton icon="close" iconSize={20} tone="light" label="Close filters" data-sheet-close />
+    </div>
+
+    {groups.map((group) => (
+      <div class="filter-sheet__group" role="group" aria-labelledby={`filter-sheet-${group.key}`}>
+        <span class="filter-sheet__label" id={`filter-sheet-${group.key}`}>
+          {group.label}
+        </span>
+        <div class="filter-sheet__options">
+          {group.options.map((option) => (
+            <Chip pressed={option.value === ANY} data-draft={group.key} data-value={option.value}>
+              {option.label}
+            </Chip>
+          ))}
+        </div>
+      </div>
+    ))}
+
+    <div class="filter-sheet__actions">
+      <Button variant="outline" data-sheet-reset>
+        Reset
+      </Button>
+      <Button class="filter-sheet__apply" data-sheet-apply>
+        Show items
+      </Button>
+    </div>
+  </div>
+</dialog>
+
+<style>
+  .filter-sheet {
+    width: 100%;
+    max-width: 35rem;
+    max-height: 90dvh;
+    margin: auto auto 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
+    background: var(--color-white);
+    color: var(--color-text);
+    box-shadow: var(--shadow-sheet);
+  }
+
+  .filter-sheet[open] {
+    animation: sheet-up 0.28s var(--ease);
+  }
+
+  .filter-sheet::backdrop {
+    background: var(--color-overlay);
+  }
+
+  @keyframes sheet-up {
+    from {
+      transform: translateY(40px);
+      opacity: 0;
+    }
+
+    to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  .filter-sheet__panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    padding: 0.625rem var(--space-5) var(--space-6);
+  }
+
+  .filter-sheet__grip {
+    align-self: center;
+    width: 2.5rem;
+    height: 5px;
+    border-radius: var(--radius-pill);
+    background: var(--color-border-strong);
+  }
+
+  .filter-sheet__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .filter-sheet__heading {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: -0.02em;
+  }
+
+  .filter-sheet__group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .filter-sheet__label {
+    font-size: var(--text-base-sm);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .filter-sheet__options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .filter-sheet__actions {
+    display: flex;
+    gap: 0.625rem;
+    margin-top: var(--space-1);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .filter-sheet__actions :global(.filter-sheet__apply) {
+    flex: 1 1 auto;
+  }
+</style>

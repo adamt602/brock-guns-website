@@ -1,0 +1,55 @@
+---
+import Icon from './Icon.astro';
+
+/**
+ * Label + control + error message. Put an Input, Select or Textarea with the
+ * same `id` in the slot. The error stays hidden until validation reveals it;
+ * its id is `${id}-error` (the control's aria-describedby).
+ */
+interface Props {
+  id: string;
+  label: string;
+  optional?: boolean;
+  /** Message shown when the field is invalid. */
+  error?: string;
+}
+
+const { id, label, optional = false, error } = Astro.props;
+---
+
+<div class="form-field">
+  <label class="form-field__label" for={id}>
+    {label} {optional && <span class="form-field__optional">(optional)</span>}
+  </label>
+  <slot />
+  {error && (
+    <p class="form-field__error" id={`${id}-error`} hidden>
+      <Icon name="alert" /> {error}
+    </p>
+  )}
+</div>
+
+<style>
+  .form-field__label {
+    display: block;
+    margin-bottom: 0.375rem;
+    font-size: var(--text-base-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+  }
+
+  .form-field__optional {
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text-muted);
+  }
+
+  .form-field__error {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.375rem;
+    margin-top: 0.375rem;
+    font-size: var(--text-base-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-error);
+  }
+</style>

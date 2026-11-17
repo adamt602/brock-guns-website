@@ -1,0 +1,61 @@
+---
+import CategoryCard from './CategoryCard.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import type { Category } from '@/types/product';
+
+/** "Browse by Category" grid. */
+interface Props {
+  categories: Category[];
+  /** Optional note under the heading (e.g. that categories are provisional). */
+  note?: string;
+}
+
+const { categories, note } = Astro.props;
+---
+
+<Section tone="stone" space="none" aria-labelledby="categories-heading">
+  <div class="category-browser">
+    <SectionHeading id="categories-heading" heading="Browse by Category" description={note} />
+    <ul class="category-browser__grid">
+      {categories.map((category) => (
+        <li>
+          <CategoryCard category={category} />
+        </li>
+      ))}
+    </ul>
+  </div>
+</Section>
+
+<style>
+  .category-browser {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    padding-block: clamp(3rem, 7vw, 6rem);
+  }
+
+  .category-browser :global(.section-heading__description) {
+    font-size: var(--text-base-sm);
+    color: var(--color-text-soft);
+  }
+
+  .category-browser__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 700px) {
+    .category-browser__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-4);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .category-browser__grid {
+      gap: var(--space-6);
+    }
+  }
+</style>

@@ -1,0 +1,64 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from './icons';
+
+/** An inline message box: information, error, or success. */
+interface Props {
+  tone?: 'info' | 'error' | 'success';
+  role?: 'note' | 'status' | 'alert';
+  class?: string;
+  [attribute: string]: unknown;
+}
+
+const { tone = 'info', role = 'note', class: className, ...rest } = Astro.props;
+const iconByTone: Record<NonNullable<Props['tone']>, IconName> = {
+  info: 'info',
+  error: 'alert',
+  success: 'check',
+};
+---
+
+<div class:list={['notice', `notice--${tone}`, className]} role={role} {...rest}>
+  <span class="notice__icon">
+    <Icon name={iconByTone[tone]} size={20} />
+  </span>
+  <span>
+    <slot />
+  </span>
+</div>
+
+<style>
+  .notice {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: 0.875rem var(--space-4);
+    font-size: var(--text-base-sm);
+    line-height: 1.5;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-notice-border);
+    background: var(--color-notice-bg);
+    color: var(--color-notice-text);
+  }
+
+  .notice--error {
+    border-color: var(--color-error-border);
+    background: var(--color-error-bg);
+    color: var(--color-error-text);
+  }
+
+  .notice--success {
+    border-color: var(--color-success-border);
+    background: var(--color-success-bg);
+    color: var(--color-success-text);
+  }
+
+  .notice__icon {
+    flex: none;
+    padding-top: 1px;
+  }
+
+  .notice :global(a) {
+    color: inherit;
+  }
+</style>

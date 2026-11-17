@@ -1,0 +1,42 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import Input from '@/components/ui/Input.astro';
+
+/** Search box for the inventory. Filtering is wired up by `inventoryFilters.ts`. */
+---
+
+<div class="product-search" role="search">
+  <label class="visually-hidden" for="inventory-search">
+    Search inventory
+  </label>
+  <span class="product-search__icon">
+    <Icon name="search" size={20} />
+  </span>
+  <Input
+    id="inventory-search"
+    class="product-search__input"
+    type="search"
+    placeholder="Search inventory"
+    autocomplete="off"
+    data-filter-search
+  />
+</div>
+
+<style>
+  .product-search {
+    position: relative;
+  }
+
+  .product-search__icon {
+    position: absolute;
+    left: var(--space-4);
+    top: var(--space-4);
+    color: var(--color-text-muted);
+    pointer-events: none;
+  }
+
+  .product-search :global(.product-search__input) {
+    padding-left: 2.875rem;
+    border-radius: var(--radius-pill);
+  }
+</style>

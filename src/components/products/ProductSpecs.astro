@@ -1,0 +1,114 @@
+---
+import Pending from '@/components/ui/Pending.astro';
+import { site } from '@/config/site';
+import type { Product } from '@/types/product';
+
+/** Description and specification table for the product page. */
+interface Props {
+  product: Product;
+}
+
+const DESCRIPTION_PLACEHOLDER =
+  'PRODUCT DESCRIPTION: a short, factual paragraph supplied with the listing. Condition, notable features, what is included.';
+
+const { product } = Astro.props;
+const { description } = product;
+
+/** Rows without a supplied value are left out (or flagged while placeholders are on). */
+const specs = product.specs.filter((spec) => site.showPendingContent || spec.value !== null);
+const showDescription = site.showPendingContent || description !== null;
+---
+
+<div class="product-specs">
+  {showDescription && (
+    <section class="product-specs__block" aria-labelledby="description-heading">
+      <h2 id="description-heading" class="product-specs__heading">
+        Description
+      </h2>
+      <p>{description ?? <Pending note={DESCRIPTION_PLACEHOLDER} />}</p>
+    </section>
+  )}
+
+  {specs.length > 0 && (
+    <section class="product-specs__block" aria-labelledby="specs-heading">
+      <h2 id="specs-heading" class="product-specs__heading">
+        Specifications
+      </h2>
+      <dl class="product-specs__list">
+        {specs.map((spec) => (
+          <div class="product-specs__row">
+            <dt>{spec.label}</dt>
+            <dd>
+              {spec.value === null ? (
+                <Pending note={spec.label.toUpperCase()} />
+              ) : (
+                <strong>{spec.value}</strong>
+              )}
+            </dd>
+          </div>
+        ))}
+      </dl>
+      <p class="product-specs__note">
+        Only specifications supplied with the item are shown. Empty rows are left out.
+      </p>
+    </section>
+  )}
+</div>
+
+<style>
+  .product-specs {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(1.75rem, 4vw, 4rem);
+    padding-top: clamp(0.5rem, 2vw, 1.5rem);
+  }
+
+  .product-specs__block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .product-specs__heading {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: -0.02em;
+  }
+
+  .product-specs__list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .product-specs__row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: 0.875rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .product-specs__row dt {
+    color: var(--color-text-muted);
+  }
+
+  .product-specs__row dd {
+    text-align: right;
+  }
+
+  .product-specs__row strong {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .product-specs__note {
+    font-size: var(--text-md);
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 700px) {
+    .product-specs {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

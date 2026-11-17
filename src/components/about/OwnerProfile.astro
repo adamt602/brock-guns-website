@@ -1,0 +1,66 @@
+---
+import Photo from '@/components/ui/Photo.astro';
+import { business } from '@/data/business';
+
+/** Framed owner portrait with a name plate. */
+const { owner } = business;
+---
+
+<div class="owner-profile">
+  <div class="owner-profile__frame" aria-hidden="true"></div>
+  <Photo
+    class="owner-profile__photo"
+    label="Portrait"
+    brief={`Real photo of ${owner.name} to be supplied`}
+    tone="dark"
+    icon="user"
+    priority
+  />
+  <div class="owner-profile__plate">
+    <span class="owner-profile__name">{owner.name}</span>
+    <span class="text-eyebrow owner-profile__title">{owner.title}</span>
+  </div>
+</div>
+
+<style>
+  .owner-profile {
+    position: relative;
+    padding: 0 0 var(--space-6) var(--space-6);
+  }
+
+  .owner-profile__frame {
+    position: absolute;
+    inset: var(--space-6) var(--space-6) 0 0;
+    border: 1px solid var(--color-brass);
+    border-radius: var(--radius-xl);
+  }
+
+  .owner-profile__photo {
+    position: relative;
+    height: clamp(21.25rem, 33vw, 28.75rem);
+  }
+
+  .owner-profile__plate {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-3) 1.125rem;
+    border-radius: var(--radius-md);
+    background: var(--color-ivory);
+    color: var(--color-navy);
+  }
+
+  .owner-profile__name {
+    font-size: 1.1875rem;
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+  }
+
+  .owner-profile__title {
+    font-size: var(--text-xs);
+    color: var(--color-brass-dark);
+  }
+</style>

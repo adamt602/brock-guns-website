@@ -1,0 +1,84 @@
+---
+import Container from './Container.astro';
+
+/**
+ * A full-width page band: background tone + vertical rhythm + centered
+ * container. Section components put their own layout inside it.
+ */
+interface Props {
+  tone?: 'ivory' | 'stone' | 'navy' | 'white';
+  /** Vertical padding. */
+  space?: 'lg' | 'md' | 'sm' | 'none';
+  /** Hairline borders that separate same-toned neighbours. */
+  border?: 'none' | 'top' | 'block';
+  /** Set false when children need to manage their own gutters. */
+  contained?: boolean;
+  class?: string;
+  [attribute: string]: unknown;
+}
+
+const {
+  tone = 'ivory',
+  space = 'lg',
+  border = 'none',
+  contained = true,
+  class: className,
+  ...rest
+} = Astro.props;
+const classes = [
+  'section',
+  `section--${tone}`,
+  `section--space-${space}`,
+  `section--border-${border}`,
+  className,
+];
+---
+
+<section class:list={classes} {...rest}>
+  {contained ? (
+    <Container>
+      <slot />
+    </Container>
+  ) : (
+    <slot />
+  )}
+</section>
+
+<style>
+  .section--ivory {
+    background: var(--color-ivory);
+  }
+
+  .section--stone {
+    background: var(--color-stone);
+  }
+
+  .section--white {
+    background: var(--color-white);
+  }
+
+  .section--navy {
+    background: var(--color-navy);
+    color: var(--color-on-dark);
+  }
+
+  .section--space-lg {
+    padding-block: var(--section-space);
+  }
+
+  .section--space-md {
+    padding-block: var(--section-space-md);
+  }
+
+  .section--space-sm {
+    padding-block: var(--section-space-sm);
+  }
+
+  .section--border-top {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .section--border-block {
+    border-block: 1px solid var(--color-border);
+  }
+</style>

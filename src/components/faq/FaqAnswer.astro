@@ -1,0 +1,25 @@
+---
+import Pending from '@/components/ui/Pending.astro';
+import { business, phoneHref } from '@/data/business';
+import type { AnswerPart } from '@/types/faq';
+
+/** Renders a structured FAQ answer (text, links, phone number, pending notes). */
+interface Props {
+  parts: AnswerPart[];
+}
+
+const { parts } = Astro.props;
+---
+
+{parts.map((part) => {
+  switch (part.type) {
+    case 'text':
+      return part.text;
+    case 'phone':
+      return <a href={phoneHref}>{business.phone.display}</a>;
+    case 'link':
+      return <a href={part.href}>{part.text}</a>;
+    case 'pending':
+      return <Pending note={part.note} />;
+  }
+})}

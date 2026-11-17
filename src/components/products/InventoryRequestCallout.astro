@@ -1,0 +1,57 @@
+---
+import CallButton from '@/components/contact/CallButton.astro';
+import Button from '@/components/ui/Button.astro';
+import ButtonGroup from '@/components/ui/ButtonGroup.astro';
+import { routes } from '@/config/routes';
+import { business } from '@/data/business';
+
+/** "Looking for something you do not see?" prompt under the catalog. */
+---
+
+<aside class="inventory-request">
+  <div class="inventory-request__text">
+    <h2 class="inventory-request__heading">Looking for something you do not see?</h2>
+    <p>Tell {business.owner.firstName} what you are after.</p>
+  </div>
+  <div class="inventory-request__actions">
+    <ButtonGroup>
+      <CallButton variant="primary" />
+      <Button variant="outline" href={routes.contact}>
+        Send a Message
+      </Button>
+    </ButtonGroup>
+  </div>
+</aside>
+
+<style>
+  .inventory-request {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4) var(--space-8);
+    margin-top: clamp(1.25rem, 3vw, 2.5rem);
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    border-radius: var(--radius-xl);
+    background: var(--color-stone);
+  }
+
+  .inventory-request__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    color: var(--color-text-soft);
+  }
+
+  .inventory-request__heading {
+    font-size: 1.375rem;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+  }
+
+  .inventory-request__actions {
+    flex: 1 1 17.5rem;
+    max-width: 26.25rem;
+  }
+</style>

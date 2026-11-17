@@ -1,0 +1,79 @@
+---
+import Section from '@/components/ui/Section.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { approach } from '@/data/about';
+
+/** "Our approach": three numbered principle cards. */
+const number = (index: number) => String(index + 1).padStart(2, '0');
+---
+
+<Section tone="white" border="block" aria-labelledby="approach-heading">
+  <div class="approach">
+    <SectionHeading
+      class="approach__heading"
+      id="approach-heading"
+      eyebrow={approach.eyebrow}
+      heading={approach.heading}
+    />
+    <ol class="approach__steps">
+      {approach.steps.map((step, index) => (
+        <li class="approach__step">
+          <span class="approach__number" aria-hidden="true">
+            {number(index)}
+          </span>
+          <h3 class="approach__title">{step.title}</h3>
+          <p>{step.description}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</Section>
+
+<style>
+  .approach {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  .approach .approach__heading {
+    max-width: 45rem;
+    gap: 0.625rem;
+  }
+
+  .approach :global(.section-heading__title) {
+    color: var(--color-navy);
+  }
+
+  .approach__steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(17.5rem, 100%), 1fr));
+    gap: var(--space-6);
+  }
+
+  .approach__step {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-7);
+    background: var(--color-ivory);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    color: var(--color-text-soft);
+  }
+
+  .approach__number {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.1em;
+    color: var(--color-brass-dark);
+  }
+
+  .approach__title {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    color: var(--color-text);
+  }
+</style>

@@ -1,0 +1,86 @@
+---
+import DemoTag from './DemoTag.astro';
+import ProductImage from './ProductImage.astro';
+import Chip from '@/components/ui/Chip.astro';
+import type { Product, ProductImage as ProductImageData } from '@/types/product';
+
+/**
+ * Image viewer for the product page: one large view plus thumbnails.
+ * When a product has no photos yet, it shows labelled placeholder views that
+ * describe the shots each listing should have.
+ */
+interface Props {
+  product: Product;
+}
+
+interface View {
+  label: string;
+  image?: ProductImageData;
+}
+
+const { product } = Astro.props;
+
+const placeholderViews: View[] = ['Full view', 'Left side', 'Detail', 'Markings'].map((label) => ({
+  label,
+}));
+const views: View[] =
+  product.images.length > 0
+    ? product.images.map((image, index) => ({ label: image.label ?? `Photo ${index + 1}`, image }))
+    : placeholderViews;
+---
+
+<div class="gallery" data-gallery>
+  {views.map((view, index) => (
+    <div data-gallery-panel hidden={index !== 0}>
+      <ProductImage
+        framed
+        image={view.image}
+        caption={`${index + 1} of ${views.length} · ${view.label}`}
+        sizes="(min-width: 700px) 55vw, 100vw"
+      >
+        {product.isDemo && <DemoTag />}
+      </ProductImage>
+    </div>
+  ))}
+
+  {views.length > 1 && (
+    <div class="gallery__thumbs" role="group" aria-label="Product images">
+      {views.map((view, index) => (
+        <Chip
+          class="gallery__thumb"
+          pressed={index === 0}
+          aria-label={`Show photo ${index + 1}, ${view.label}`}
+          data-gallery-thumb
+        >
+          {index + 1}
+        </Chip>
+      ))}
+    </div>
+  )}
+</div>
+
+<script>
+  import { initProductGallery } from '@/scripts/productGallery';
+  initProductGallery();
+</script>
+
+<style>
+  .gallery {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .gallery__thumbs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.625rem;
+  }
+
+  .gallery :global(.gallery__thumb) {
+    aspect-ratio: 4 / 3;
+    height: auto;
+    padding: 0;
+    border-radius: var(--radius-lg);
+  }
+</style>

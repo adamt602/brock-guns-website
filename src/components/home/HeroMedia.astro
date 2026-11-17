@@ -1,0 +1,38 @@
+---
+import Photo, { type SitePhoto } from '@/components/ui/Photo.astro';
+
+/** Hero photograph (or its placeholder until a real photo is supplied). */
+interface Props {
+  image?: SitePhoto | null;
+  brief: string;
+}
+
+const { image, brief } = Astro.props;
+---
+
+<Photo
+  class="hero-media"
+  image={image}
+  label="Hero photograph"
+  brief={brief}
+  tone="dark"
+  priority
+/>
+
+<style>
+  .hero-media {
+    height: 11.875rem;
+  }
+
+  @media (min-width: 700px) {
+    .hero-media {
+      height: 18.75rem;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .hero-media {
+      height: 28.75rem;
+    }
+  }
+</style>

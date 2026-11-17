@@ -1,0 +1,53 @@
+---
+import ProductSearch from './ProductSearch.astro';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
+import Container from '@/components/ui/Container.astro';
+import Notice from '@/components/ui/Notice.astro';
+import { routes } from '@/config/routes';
+import { business } from '@/data/business';
+
+/** Top of the inventory page: breadcrumbs, title, demo notice and search. */
+interface Props {
+  /** Show the notice that listings are demonstration data. */
+  showDemoNotice: boolean;
+}
+
+const { showDemoNotice } = Astro.props;
+---
+
+<Container class="inventory-header">
+  <Breadcrumbs items={[{ label: 'Home', href: routes.home }, { label: 'Inventory' }]} />
+  <div class="inventory-header__title">
+    <h1 class="text-h1">Inventory</h1>
+    <p class="text-lede inventory-header__lede">
+      Browse, then call or message {business.owner.firstName} about anything that interests you.
+    </p>
+  </div>
+  {showDemoNotice && (
+    <Notice>
+      <strong>Demonstration listings.</strong> Nothing here is real inventory, pricing, or
+      availability yet.
+    </Notice>
+  )}
+  <ProductSearch />
+</Container>
+
+<style>
+  .inventory-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    padding-top: clamp(1.25rem, 3vw, 2.5rem);
+  }
+
+  .inventory-header__title {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .inventory-header__lede {
+    max-width: 38.75rem;
+    color: var(--color-text-muted);
+  }
+</style>

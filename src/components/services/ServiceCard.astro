@@ -1,0 +1,61 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import TextLink from '@/components/ui/TextLink.astro';
+import { routes } from '@/config/routes';
+import type { Service } from '@/types/service';
+
+/** Compact summary of one service, linking to its section on the services page. */
+interface Props {
+  service: Service;
+}
+
+const { service } = Astro.props;
+---
+
+<article class="service-card">
+  <span class="service-card__icon">
+    <Icon name={service.icon} size={26} />
+  </span>
+  <h3 class="text-title service-card__title">{service.title}</h3>
+  <p class="service-card__summary">{service.summary}</p>
+  <TextLink
+    href={`${routes.services}#${service.id}`}
+    iconEnd="arrow-right"
+    aria-label={`Learn more about ${service.title.toLowerCase()}`}
+  >
+    Learn more
+  </TextLink>
+</article>
+
+<style>
+  .service-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+    padding: var(--space-6);
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    transition:
+      transform var(--duration-base) var(--ease),
+      box-shadow var(--duration-base) var(--ease);
+  }
+
+  .service-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-soft);
+  }
+
+  .service-card__icon {
+    color: var(--color-brass-dark);
+  }
+
+  .service-card__title {
+    margin-top: 0.375rem;
+  }
+
+  .service-card__summary {
+    color: var(--color-text-muted);
+  }
+</style>

@@ -1,0 +1,100 @@
+---
+import ProductCard from './ProductCard.astro';
+import type { Product } from '@/types/product';
+
+/**
+ * Lays out product cards. It receives products as props and never loads data.
+ *
+ * grid: the catalog grid (1 → 2 → 3 → 4 columns).
+ * carousel: a swipeable row on phones that becomes a 2/3-column grid on
+ *   larger screens. Place it inside a Container; on phones it bleeds to the
+ *   screen edges so cards can scroll under the page gutter.
+ *
+ * Each item carries data attributes describing its product so that
+ * `inventoryFilters.ts` can filter and sort without re-rendering.
+ */
+interface Props {
+  products: Product[];
+  layout?: 'grid' | 'carousel';
+  headingLevel?: 'h2' | 'h3';
+  class?: string;
+  [attribute: string]: unknown;
+}
+
+const { products, layout = 'grid', headingLevel = 'h3', class: className, ...rest } = Astro.props;
+---
+
+<ul class:list={['product-grid', `product-grid--${layout}`, className]} {...rest}>
+  {products.map((product) => (
+    <li
+      class="product-grid__item"
+      data-product-item
+      data-name={product.name}
+      data-category={product.category.id}
+      data-condition={product.condition}
+      data-availability={product.availability}
+      data-search={`${product.name} ${product.manufacturer} ${product.category.label}`.toLowerCase()}
+    >
+      <ProductCard product={product} headingLevel={headingLevel} />
+    </li>
+  ))}
+</ul>
+
+<style>
+  .product-grid--grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-4);
+  }
+
+  .product-grid--carousel {
+    display: flex;
+    gap: 0.875rem;
+    margin-inline: calc(-1 * var(--gutter));
+    padding: 0.375rem var(--gutter) var(--space-5);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+
+  .product-grid--carousel::-webkit-scrollbar {
+    display: none;
+  }
+
+  .product-grid--carousel .product-grid__item {
+    flex: 0 0 78%;
+    scroll-snap-align: start;
+  }
+
+  @media (min-width: 430px) {
+    .product-grid--grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 700px) {
+    .product-grid--carousel {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-5);
+      margin-inline: 0;
+      padding: 0;
+      overflow: visible;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .product-grid--grid,
+    .product-grid--carousel {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-6);
+    }
+  }
+
+  @media (min-width: 1150px) {
+    .product-grid--grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>

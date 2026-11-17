@@ -1,0 +1,108 @@
+---
+import CallButton from '@/components/contact/CallButton.astro';
+import Button from '@/components/ui/Button.astro';
+import ButtonGroup from '@/components/ui/ButtonGroup.astro';
+import Icon from '@/components/ui/Icon.astro';
+import Pending from '@/components/ui/Pending.astro';
+import Photo from '@/components/ui/Photo.astro';
+import Section from '@/components/ui/Section.astro';
+import Split from '@/components/ui/Split.astro';
+import { serviceInquiryRoute } from '@/config/routes';
+import { site } from '@/config/site';
+import { isPending } from '@/types/content';
+import type { Service } from '@/types/service';
+
+/** Full description of one service: photo beside copy, points and actions. */
+interface Props {
+  service: Service;
+  /** Alternate the background and photo side between consecutive services. */
+  alternate?: boolean;
+}
+
+const { service, alternate = false } = Astro.props;
+const points = service.points.filter((point) => site.showPendingContent || !isPending(point));
+const headingId = `${service.id}-heading`;
+---
+
+<Section
+  id={service.id}
+  tone={alternate ? 'stone' : 'ivory'}
+  space="sm"
+  aria-labelledby={headingId}
+>
+  <Split reverse={alternate}>
+    <Photo
+      class="service-detail__photo"
+      label="Photograph"
+      brief={service.imageBrief}
+      tone={alternate ? 'stone' : 'light'}
+    />
+    <div class="service-detail__content">
+      <span class="service-detail__icon">
+        <Icon name={service.icon} size={28} />
+      </span>
+      <h2 id={headingId} class="text-h2">
+        {service.title}
+      </h2>
+      <p class="text-lede service-detail__description">{service.description}</p>
+      <ul class="service-detail__points">
+        {points.map((point) => (
+          <li class="service-detail__point">
+            <span class="service-detail__check">
+              <Icon name="check" size={20} />
+            </span>
+            <span>{isPending(point) ? <Pending note={point.note} /> : point}</span>
+          </li>
+        ))}
+      </ul>
+      <div class="service-detail__actions">
+        <ButtonGroup>
+          <Button href={serviceInquiryRoute(service.id)}>{service.inquiryLabel}</Button>
+          <CallButton />
+        </ButtonGroup>
+      </div>
+    </div>
+  </Split>
+</Section>
+
+<style>
+  .service-detail__photo {
+    height: clamp(13.75rem, 30vw, 25rem);
+  }
+
+  .service-detail__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.875rem;
+  }
+
+  .service-detail__icon,
+  .service-detail__check {
+    color: var(--color-brass-dark);
+  }
+
+  .service-detail__description {
+    color: var(--color-text-soft);
+  }
+
+  .service-detail__points {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .service-detail__point {
+    display: flex;
+    gap: 0.625rem;
+  }
+
+  .service-detail__check {
+    padding-top: 3px;
+  }
+
+  .service-detail__actions {
+    width: 100%;
+    padding-top: 0.375rem;
+  }
+</style>

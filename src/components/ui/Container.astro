@@ -1,0 +1,23 @@
+---
+/** Centers content at the site's maximum width with the standard gutters. */
+interface Props {
+  as?: 'div' | 'section' | 'header' | 'footer' | 'nav';
+  class?: string;
+  [attribute: string]: unknown;
+}
+
+const { as: Element = 'div', class: className, ...rest } = Astro.props;
+---
+
+<Element class:list={['container', className]} {...rest}>
+  <slot />
+</Element>
+
+<style>
+  .container {
+    width: 100%;
+    max-width: var(--content-width);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+</style>

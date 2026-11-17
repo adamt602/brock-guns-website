@@ -1,0 +1,49 @@
+---
+import FAQAccordion from './FAQAccordion.astro';
+import FaqTopics from './FaqTopics.astro';
+import Section from '@/components/ui/Section.astro';
+import type { FaqGroup } from '@/types/faq';
+
+/** FAQ body: topic links beside the grouped questions. */
+interface Props {
+  groups: FaqGroup[];
+}
+
+const { groups } = Astro.props;
+---
+
+<Section tone="ivory" space="none" aria-label="Frequently asked questions">
+  <div class="faq-section">
+    <div class="faq-section__topics">
+      <FaqTopics groups={groups} />
+    </div>
+    <div class="faq-section__groups">
+      {groups.map((group) => (
+        <FAQAccordion group={group} />
+      ))}
+    </div>
+  </div>
+</Section>
+
+<style>
+  .faq-section {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: clamp(1.75rem, 5vw, 4.5rem);
+    padding-block: clamp(2.5rem, 5vw, 4.5rem) clamp(3.5rem, 6vw, 5.5rem);
+  }
+
+  .faq-section__topics {
+    flex: 1 1 13.75rem;
+    min-width: 0;
+  }
+
+  .faq-section__groups {
+    flex: 999 1 32.5rem;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2.75rem;
+  }
+</style>

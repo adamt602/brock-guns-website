@@ -1,0 +1,53 @@
+---
+import HeroActions from './HeroActions.astro';
+import HeroContent from './HeroContent.astro';
+import HeroMedia from './HeroMedia.astro';
+import Section from '@/components/ui/Section.astro';
+import { homeHero } from '@/data/home';
+
+/**
+ * Homepage hero. Owns the hero's layout: stacked on phones and tablets,
+ * copy beside the photograph on desktop. Copy lives in `src/data/home.ts`.
+ */
+---
+
+<Section tone="navy" space="none" aria-labelledby="hero-heading">
+  <div class="home-hero">
+    <HeroContent
+      headingId="hero-heading"
+      eyebrow={homeHero.eyebrow}
+      headingLead={homeHero.headingLead}
+      headingAccent={homeHero.headingAccent}
+      description={homeHero.description}
+    >
+      <HeroActions
+        primaryLabel={homeHero.primaryAction}
+        secondaryLabel={homeHero.secondaryAction}
+      />
+    </HeroContent>
+    <HeroMedia brief={homeHero.imageBrief} />
+  </div>
+</Section>
+
+<style>
+  .home-hero {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-7);
+    padding-block: var(--space-7) 2.25rem;
+  }
+
+  @media (min-width: 900px) {
+    .home-hero {
+      flex-direction: row;
+      align-items: center;
+      gap: clamp(2.5rem, 5vw, 4.5rem);
+      padding-block: 4.5rem;
+    }
+
+    .home-hero > :global(*) {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+  }
+</style>

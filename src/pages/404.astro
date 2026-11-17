@@ -1,0 +1,24 @@
+---
+import CallButton from '@/components/contact/CallButton.astro';
+import Button from '@/components/ui/Button.astro';
+import ButtonGroup from '@/components/ui/ButtonGroup.astro';
+import EmptyState from '@/components/ui/EmptyState.astro';
+import Section from '@/components/ui/Section.astro';
+import { routes } from '@/config/routes';
+import PageLayout from '@/layouts/PageLayout.astro';
+---
+
+<PageLayout title="Page Not Found" noindex>
+  <Section tone="ivory">
+    <EmptyState
+      heading="Page not found"
+      headingLevel="h1"
+      description="That page does not exist or has moved. The inventory is a good place to start."
+    >
+      <ButtonGroup align="center">
+        <Button href={routes.inventory}>Browse Inventory</Button>
+        <CallButton />
+      </ButtonGroup>
+    </EmptyState>
+  </Section>
+</PageLayout>

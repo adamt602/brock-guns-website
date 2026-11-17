@@ -1,0 +1,46 @@
+---
+import ProductGrid from './ProductGrid.astro';
+import Section from '@/components/ui/Section.astro';
+import TextLink from '@/components/ui/TextLink.astro';
+import { routes } from '@/config/routes';
+import type { Product } from '@/types/product';
+
+/** "More in <category>" strip at the bottom of the product page. */
+interface Props {
+  heading: string;
+  products: Product[];
+}
+
+const { heading, products } = Astro.props;
+---
+
+{products.length > 0 && (
+  <Section tone="stone" space="none" aria-labelledby="related-heading">
+    <div class="related">
+      <div class="related__header">
+        <h2 id="related-heading" class="text-h3">
+          {heading}
+        </h2>
+        <TextLink href={routes.inventory} iconEnd="arrow-right">
+          View All Inventory
+        </TextLink>
+      </div>
+      <ProductGrid products={products} layout="carousel" />
+    </div>
+  </Section>
+)}
+
+<style>
+  .related {
+    padding-block: clamp(2.75rem, 6vw, 5rem);
+  }
+
+  .related__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-8);
+    margin-bottom: var(--space-5);
+  }
+</style>

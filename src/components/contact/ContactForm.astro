@@ -1,0 +1,179 @@
+---
+import { contactTopics } from './contactTopics';
+import Button from '@/components/ui/Button.astro';
+import FormField from '@/components/ui/FormField.astro';
+import Input from '@/components/ui/Input.astro';
+import Notice from '@/components/ui/Notice.astro';
+import Pending from '@/components/ui/Pending.astro';
+import Select from '@/components/ui/Select.astro';
+import Textarea from '@/components/ui/Textarea.astro';
+import { site } from '@/config/site';
+import { business, phoneHref } from '@/data/business';
+
+/**
+ * Contact form. Validation and submission live in `contactForm.ts`.
+ *
+ * Honesty rule: a success message appears only after the endpoint confirms a
+ * real send. With no endpoint configured, the form says so and points to the
+ * phone number instead of pretending.
+ */
+const phoneLink = { href: phoneHref, text: business.phone.display };
+---
+
+<section class="contact-form" aria-labelledby="form-heading">
+  <div class="contact-form__inner">
+    <div class="contact-form__intro">
+      <h2 id="form-heading" class="contact-form__heading">
+        Send a message
+      </h2>
+      <p class="contact-form__hint">Fields are required unless marked optional.</p>
+    </div>
+
+    <div class="contact-form__status" data-form-status>
+      <Notice tone="error" role="alert" data-status="invalid" hidden>
+        <strong>Please fix the highlighted fields.</strong> Nothing has been sent yet.
+      </Notice>
+      <Notice role="status" data-status="not-connected" hidden>
+        <strong>Nothing was sent.</strong> This form is not connected yet. To reach{' '}
+        {business.owner.firstName} now, call <a href={phoneLink.href}>{phoneLink.text}</a>.
+      </Notice>
+      <Notice tone="success" role="status" data-status="sent" hidden>
+        <strong>Message sent. Thank you.</strong>
+        {business.owner.firstName} will get back to you.
+      </Notice>
+      <Notice tone="error" role="alert" data-status="failed" hidden>
+        <strong>Your message did not send.</strong> Nothing was lost; your text is still below. Try
+        again, or call <a href={phoneLink.href}>{phoneLink.text}</a>.
+      </Notice>
+    </div>
+
+    <form
+      class="contact-form__form"
+      novalidate
+      data-contact-form
+      data-endpoint={site.contactFormEndpoint}
+    >
+      <div class="contact-form__row">
+        <FormField id="contact-name" label="Full name" error="Enter your full name.">
+          <Input id="contact-name" name="name" type="text" autocomplete="name" required hasError />
+        </FormField>
+        <FormField
+          id="contact-email"
+          label="Email"
+          error="Enter an email address like name@example.com."
+        >
+          <Input
+            id="contact-email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            placeholder="name@example.com"
+            required
+            hasError
+          />
+        </FormField>
+      </div>
+      <div class="contact-form__row">
+        <FormField id="contact-phone" label="Telephone" optional>
+          <Input id="contact-phone" name="phone" type="tel" autocomplete="tel" />
+        </FormField>
+        <FormField
+          id="contact-topic"
+          label="What is this about?"
+          error="Choose what your message is about."
+        >
+          <Select id="contact-topic" name="topic" options={contactTopics} required hasError />
+        </FormField>
+      </div>
+      <FormField
+        id="contact-message"
+        label="Message"
+        error={`Tell ${business.owner.firstName} a little about what you need.`}
+      >
+        <Textarea id="contact-message" name="message" required hasError />
+      </FormField>
+
+      <div class="contact-form__submit">
+        <Button class="contact-form__button" type="submit" data-submit>
+          Send Message
+        </Button>
+        <span class="contact-form__alt">
+          Or call <a href={phoneLink.href}>{phoneLink.text}</a>
+        </span>
+      </div>
+      <p class="contact-form__privacy">
+        <Pending note="PRIVACY NOTE: one sentence on how messages are handled, to be confirmed before launch." />
+      </p>
+    </form>
+  </div>
+</section>
+
+<script>
+  import { initContactForm } from '@/scripts/contactForm';
+  initContactForm();
+</script>
+
+<style>
+  .contact-form__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.375rem;
+    max-width: 47.5rem;
+    padding: clamp(3rem, 6vw, 5.5rem) clamp(1.25rem, 5vw, 4rem);
+  }
+
+  .contact-form__intro {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .contact-form__heading {
+    font-size: 1.875rem;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: var(--color-navy);
+  }
+
+  .contact-form__hint,
+  .contact-form__alt,
+  .contact-form__privacy {
+    color: var(--color-text-muted);
+  }
+
+  .contact-form__status:not(:has(:global(.notice:not([hidden])))) {
+    display: none;
+  }
+
+  .contact-form__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .contact-form__row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+    gap: var(--space-5);
+  }
+
+  .contact-form__submit {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.875rem var(--space-6);
+  }
+
+  .contact-form__button {
+    min-width: 12.5rem;
+  }
+
+  .contact-form__alt {
+    font-size: var(--text-base-sm);
+  }
+
+  .contact-form__privacy {
+    font-size: var(--text-md);
+  }
+</style>

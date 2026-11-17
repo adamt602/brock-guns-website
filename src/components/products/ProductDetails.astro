@@ -1,0 +1,127 @@
+---
+import CallButton from '@/components/contact/CallButton.astro';
+import Badge from '@/components/ui/Badge.astro';
+import Button from '@/components/ui/Button.astro';
+import ButtonGroup from '@/components/ui/ButtonGroup.astro';
+import Icon from '@/components/ui/Icon.astro';
+import Pending from '@/components/ui/Pending.astro';
+import { itemInquiryRoute } from '@/config/routes';
+import { site } from '@/config/site';
+import {
+  availabilityLabels,
+  conditionLabels,
+  formatProductPrice,
+} from '@/lib/products/productLabels';
+import type { Product } from '@/types/product';
+
+/** Buying panel on the product page: name, attributes, price, status, actions. */
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+---
+
+<div class="product-details">
+  <span class="product-details__brand">{product.manufacturer}</span>
+  <h1 class="product-details__name">{product.name}</h1>
+
+  <div class="product-details__badges">
+    <Badge>{product.category.singular}</Badge>
+    <Badge>{conditionLabels[product.condition]}</Badge>
+    {product.model === null ? (
+      site.showPendingContent && <Badge>Model when provided</Badge>
+    ) : (
+      <Badge>{product.model}</Badge>
+    )}
+  </div>
+
+  <p class="product-details__price">{formatProductPrice(product)}</p>
+
+  <p class="product-details__status" data-availability={product.availability}>
+    {product.availability === 'available' && <Icon name="check" size={20} />}
+    {availabilityLabels[product.availability]}
+    {product.isDemo && <span class="product-details__demo">(demo status)</span>}
+  </p>
+
+  <div class="product-details__actions">
+    <ButtonGroup>
+      <Button href={itemInquiryRoute(product.name)}>Ask About This Item</Button>
+      <CallButton />
+    </ButtonGroup>
+  </div>
+
+  <p class="product-details__note">
+    This site is an informational catalog. There is no online checkout.{' '}
+    <Pending note="PURCHASE PROCESS: TO BE CONFIRMED WITH DAVID" />
+  </p>
+</div>
+
+<style>
+  .product-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  .product-details__brand {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .product-details__name {
+    font-size: clamp(1.75rem, 1.2vw + 1.4375rem, 2.625rem);
+    line-height: var(--leading-tight);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: -0.03em;
+  }
+
+  .product-details__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .product-details__price {
+    margin-top: 0.375rem;
+    font-size: 1.625rem;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: -0.02em;
+  }
+
+  .product-details__status {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-success-text);
+  }
+
+  .product-details__status[data-availability='confirm'] {
+    color: var(--color-notice-text);
+  }
+
+  .product-details__status[data-availability='sold'] {
+    color: var(--color-text-soft);
+  }
+
+  .product-details__demo {
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text-muted);
+  }
+
+  .product-details__actions {
+    width: 100%;
+    padding-top: 0.625rem;
+  }
+
+  .product-details__note {
+    margin-top: var(--space-1);
+    font-size: var(--text-base-sm);
+    color: var(--color-text-muted);
+  }
+</style>

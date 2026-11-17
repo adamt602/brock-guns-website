@@ -1,0 +1,40 @@
+---
+import Grid from '@/components/ui/Grid.astro';
+import RuledFeature from '@/components/ui/RuledFeature.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { valueProps } from '@/data/home';
+
+/** "Why Brock": three reasons to buy here, on navy. */
+---
+
+<Section tone="navy" aria-labelledby="value-props-heading">
+  <div class="value-props">
+    <SectionHeading
+      class="value-props__heading"
+      id="value-props-heading"
+      eyebrow={valueProps.eyebrow}
+      heading={valueProps.heading}
+      size="h1"
+      tone="dark"
+    />
+    <Grid columns={3}>
+      {valueProps.items.map((item) => (
+        <RuledFeature title={item.title} description={item.description} tone="dark" />
+      ))}
+    </Grid>
+  </div>
+</Section>
+
+<style>
+  .value-props {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.75rem, 4vw, 3.5rem);
+  }
+
+  .value-props .value-props__heading {
+    max-width: 53.75rem;
+    gap: 0.625rem;
+  }
+</style>

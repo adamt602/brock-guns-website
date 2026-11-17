@@ -1,0 +1,31 @@
+---
+import Button from '@/components/ui/Button.astro';
+import ButtonGroup from '@/components/ui/ButtonGroup.astro';
+import { routes } from '@/config/routes';
+
+/** The hero's two calls to action. Inventory is always the primary one. */
+interface Props {
+  primaryLabel: string;
+  secondaryLabel: string;
+}
+
+const { primaryLabel, secondaryLabel } = Astro.props;
+---
+
+<div class="hero-actions">
+  <ButtonGroup>
+    <Button variant="light" href={routes.inventory} iconEnd="arrow-right">
+      {primaryLabel}
+    </Button>
+    <Button variant="outline-light" href={routes.contact}>
+      {secondaryLabel}
+    </Button>
+  </ButtonGroup>
+</div>
+
+<style>
+  .hero-actions {
+    width: 100%;
+    padding-top: 0.375rem;
+  }
+</style>

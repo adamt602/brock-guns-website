@@ -1,0 +1,72 @@
+---
+export interface Crumb {
+  label: string;
+  /** Omit for the current page (the last crumb). */
+  href?: string;
+}
+
+interface Props {
+  items: Crumb[];
+  tone?: 'light' | 'dark';
+  class?: string;
+}
+
+const { items, tone = 'light', class: className, ...rest } = Astro.props;
+---
+
+<nav
+  aria-label="Breadcrumb"
+  class:list={['breadcrumbs', `breadcrumbs--${tone}`, className]}
+  {...rest}
+>
+  <ol class="breadcrumbs__list">
+    {items.map((item, index) => (
+      <>
+        {index > 0 && <li aria-hidden="true">/</li>}
+        {item.href ? (
+          <li>
+            <a href={item.href}>{item.label}</a>
+          </li>
+        ) : (
+          <li aria-current="page" class="breadcrumbs__current">
+            {item.label}
+          </li>
+        )}
+      </>
+    ))}
+  </ol>
+</nav>
+
+<style>
+  .breadcrumbs__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-md);
+    color: var(--color-text-muted);
+  }
+
+  .breadcrumbs a {
+    display: inline-block;
+    padding-block: var(--space-1);
+  }
+
+  .breadcrumbs--light .breadcrumbs__current {
+    color: var(--color-text);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .breadcrumbs--dark .breadcrumbs__list {
+    color: var(--color-on-dark-soft);
+  }
+
+  .breadcrumbs--dark a {
+    color: var(--color-white);
+    text-decoration: none;
+  }
+
+  .breadcrumbs--dark a:hover {
+    color: var(--color-brass-pale);
+  }
+</style>

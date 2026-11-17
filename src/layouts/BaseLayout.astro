@@ -1,0 +1,42 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource/rye';
+import '@/styles/global.css';
+import { asset } from '@/config/routes';
+import { site } from '@/config/site';
+
+/**
+ * The HTML document shell: <head> metadata, fonts and global styles.
+ * Most pages use PageLayout, which adds the shared header and footer.
+ */
+interface Props {
+  title: string;
+  description?: string;
+  /** Ask search engines not to index this page (e.g. the 404 page). */
+  noindex?: boolean;
+}
+
+const { title, description = site.defaultDescription, noindex = false } = Astro.props;
+const fullTitle = title === site.titleSuffix ? title : `${title} | ${site.titleSuffix}`;
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+---
+
+<!doctype html>
+<html lang={site.language}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content={site.themeColor} />
+    <link rel="icon" type="image/svg+xml" href={asset('favicon.svg')} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

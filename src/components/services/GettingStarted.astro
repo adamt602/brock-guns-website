@@ -1,0 +1,42 @@
+---
+import UnconfirmedServicesPanel from './UnconfirmedServices.astro';
+import Grid from '@/components/ui/Grid.astro';
+import RuledFeature from '@/components/ui/RuledFeature.astro';
+import Section from '@/components/ui/Section.astro';
+import type { ProcessStep, UnconfirmedServices } from '@/types/service';
+
+/** Three-step "How to get started" list. */
+interface Props {
+  steps: ProcessStep[];
+  unconfirmed: UnconfirmedServices;
+}
+
+const { steps, unconfirmed } = Astro.props;
+---
+
+<Section tone="ivory" space="md" aria-labelledby="getting-started-heading">
+  <div class="getting-started">
+    <h2 id="getting-started-heading" class="text-h2">
+      How to get started
+    </h2>
+    <Grid columns={3} as="ol" class="getting-started__steps">
+      {steps.map((step, index) => (
+        <RuledFeature
+          as="li"
+          kicker={`Step ${index + 1}`}
+          title={step.title}
+          description={step.description}
+        />
+      ))}
+    </Grid>
+    <UnconfirmedServicesPanel content={unconfirmed} />
+  </div>
+</Section>
+
+<style>
+  .getting-started {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
+</style>

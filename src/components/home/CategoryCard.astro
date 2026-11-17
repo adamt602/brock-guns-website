@@ -1,0 +1,68 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import { categoryRoute } from '@/config/routes';
+import type { Category } from '@/types/product';
+
+/** Links to the inventory filtered to one category. */
+interface Props {
+  category: Category;
+}
+
+const { category } = Astro.props;
+---
+
+<a class="category-card" href={categoryRoute(category.id)}>
+  <span class="category-card__media">
+    <Icon name="image" size={26} />
+  </span>
+  <span class="category-card__label">
+    <span>{category.label}</span>
+    <Icon name="chevron-right" />
+  </span>
+</a>
+
+<style>
+  .category-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    color: var(--color-text);
+    text-decoration: none;
+    transition:
+      transform var(--duration-base) var(--ease),
+      box-shadow var(--duration-base) var(--ease);
+  }
+
+  .category-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-hover);
+    color: var(--color-text);
+  }
+
+  .category-card:active {
+    transform: scale(0.98);
+  }
+
+  .category-card__media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 4 / 3;
+    background: var(--color-surface-media);
+    color: var(--color-text-muted);
+  }
+
+  .category-card__label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding: 0.875rem var(--space-4) var(--space-4);
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: -0.015em;
+  }
+</style>

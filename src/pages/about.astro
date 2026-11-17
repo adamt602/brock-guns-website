@@ -1,0 +1,21 @@
+---
+import AboutHero from '@/components/about/AboutHero.astro';
+import ApproachSection from '@/components/about/ApproachSection.astro';
+import BrandValues from '@/components/about/BrandValues.astro';
+import BusinessStory from '@/components/about/BusinessStory.astro';
+import HeritageSection from '@/components/about/HeritageSection.astro';
+import ContactCallout from '@/components/sections/ContactCallout.astro';
+import PageLayout from '@/layouts/PageLayout.astro';
+---
+
+<PageLayout
+  title="About David Johnson"
+  description="Meet David Johnson, owner of Brock Guns and Repair LLC, a Texas firearm retailer that also offers gunsmithing and repairs."
+>
+  <AboutHero />
+  <BusinessStory />
+  <ApproachSection />
+  <HeritageSection />
+  <BrandValues />
+  <ContactCallout />
+</PageLayout>

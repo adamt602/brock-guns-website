@@ -1,0 +1,121 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import Select from '@/components/ui/Select.astro';
+import {
+  ANY,
+  availabilityOptions,
+  conditionOptions,
+  sortOptions,
+} from '@/lib/products/filterOptions';
+
+/**
+ * Inventory toolbar: result count, condition/availability selects (desktop),
+ * a "Filter" button that opens the filter sheet (mobile/tablet), and sort.
+ */
+interface Props {
+  /** Number of products before any filtering, for the initial count. */
+  total: number;
+}
+
+const { total } = Astro.props;
+const conditionSelectOptions = conditionOptions.map((option) => ({
+  value: option.value,
+  label: `Condition: ${option.label}`,
+}));
+const availabilitySelectOptions = availabilityOptions.map((option) =>
+  option.value === ANY ? { value: ANY, label: 'Availability: Any' } : option,
+);
+---
+
+<div class="product-filters">
+  <p class="product-filters__count" aria-live="polite" data-filter-count>
+    {total}
+    {total === 1 ? 'item' : 'items'}
+  </p>
+  <div class="product-filters__controls">
+    <Select
+      class="product-filters__desktop"
+      variant="inline"
+      aria-label="Condition"
+      options={conditionSelectOptions}
+      data-filter-select="condition"
+    />
+    <Select
+      class="product-filters__desktop"
+      variant="inline"
+      aria-label="Availability"
+      options={availabilitySelectOptions}
+      data-filter-select="availability"
+    />
+    <button type="button" class="product-filters__open product-filters__mobile" data-filter-open>
+      <Icon name="filter" size={20} />
+      <span data-filter-open-label>Filter</span>
+    </button>
+    <span class="product-filters__divider product-filters__mobile" aria-hidden="true"></span>
+    <Select variant="inline" aria-label="Sort" options={sortOptions} data-filter-select="sort" />
+  </div>
+</div>
+
+<style>
+  .product-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 var(--space-4);
+    min-height: 3.5rem;
+    border-block: 1px solid var(--color-border);
+  }
+
+  .product-filters__count {
+    font-size: var(--text-base-sm);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .product-filters__controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+  }
+
+  .product-filters__open {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: var(--touch-target);
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: none;
+    font-family: inherit;
+    font-size: var(--text-base-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-navy);
+    cursor: pointer;
+  }
+
+  .product-filters__open:hover {
+    color: var(--color-brass-dark);
+  }
+
+  .product-filters__divider {
+    width: 1px;
+    height: 1.25rem;
+    background: var(--color-border-strong);
+  }
+
+  .product-filters :global(.product-filters__desktop) {
+    display: none;
+  }
+
+  /* Room for the selects inline: the filter sheet is no longer needed. */
+  @media (min-width: 900px) {
+    .product-filters :global(.product-filters__desktop) {
+      display: inline-flex;
+    }
+
+    .product-filters__mobile {
+      display: none;
+    }
+  }
+</style>

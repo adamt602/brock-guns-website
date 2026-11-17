@@ -1,0 +1,98 @@
+---
+import BrandLogo from './BrandLogo.astro';
+import MobileNavigation from './MobileNavigation.astro';
+import Navigation from './Navigation.astro';
+import Button from '@/components/ui/Button.astro';
+import Container from '@/components/ui/Container.astro';
+import IconButton from '@/components/ui/IconButton.astro';
+import { business, phoneHref } from '@/data/business';
+import { primaryNavigation } from '@/data/navigation';
+
+/**
+ * Site header. Owns the switch between the mobile layout (phone icon + menu)
+ * and the desktop layout (navigation bar + phone button).
+ */
+const callLabel = `Call ${business.owner.firstName} at ${business.phone.display}`;
+---
+
+<header class="header">
+  <Container class="header__bar">
+    <BrandLogo />
+
+    <div class="header__desktop">
+      <Navigation items={primaryNavigation} />
+    </div>
+    <div class="header__desktop">
+      <Button
+        class="header__phone-button"
+        variant="outline-light"
+        size="sm"
+        href={phoneHref}
+        iconStart="phone"
+      >
+        {business.phone.display}
+      </Button>
+      <IconButton class="header__phone-icon" icon="phone" href={phoneHref} label={callLabel} />
+    </div>
+
+    <div class="header__mobile">
+      <IconButton icon="phone" href={phoneHref} label={callLabel} />
+      <MobileNavigation items={primaryNavigation} />
+    </div>
+  </Container>
+</header>
+
+<style>
+  .header {
+    position: relative;
+    z-index: 5;
+    background: var(--color-navy);
+    border-bottom: 1px solid rgb(255 255 255 / 0.1);
+  }
+
+  .header :global(.header__bar) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    min-height: var(--header-height);
+  }
+
+  .header__mobile {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-right: -0.625rem;
+  }
+
+  .header__desktop {
+    display: none;
+    align-items: center;
+  }
+
+  .header :global(.header__phone-button) {
+    display: none;
+  }
+
+  /* Wide enough for the full navigation bar. */
+  @media (min-width: 900px) {
+    .header__mobile {
+      display: none;
+    }
+
+    .header__desktop {
+      display: flex;
+    }
+  }
+
+  /* Wide enough to spell out the phone number. */
+  @media (min-width: 1150px) {
+    .header :global(.header__phone-button) {
+      display: inline-flex;
+    }
+
+    .header :global(.header__phone-icon) {
+      display: none;
+    }
+  }
+</style>

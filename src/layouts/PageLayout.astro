@@ -1,0 +1,25 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Footer from '@/components/layout/Footer.astro';
+import Header from '@/components/layout/Header.astro';
+
+/** Standard page chrome: skip link, header, <main>, footer. */
+interface Props {
+  title: string;
+  description?: string;
+  noindex?: boolean;
+}
+
+const props = Astro.props;
+---
+
+<BaseLayout {...props}>
+  <a class="skip-link" href="#main">
+    Skip to content
+  </a>
+  <Header />
+  <main id="main">
+    <slot />
+  </main>
+  <Footer />
+</BaseLayout>

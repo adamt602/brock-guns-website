@@ -1,0 +1,35 @@
+---
+import ProductDetails from './ProductDetails.astro';
+import ProductGallery from './ProductGallery.astro';
+import ProductPageNav from './ProductPageNav.astro';
+import ProductSpecs from './ProductSpecs.astro';
+import Container from '@/components/ui/Container.astro';
+import Split from '@/components/ui/Split.astro';
+import type { Product } from '@/types/product';
+
+/** Main block of the product page: navigation, gallery + details, specs. */
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+---
+
+<Container class="product-overview">
+  <ProductPageNav product={product} />
+  <Split align="start" ratio="media-wide">
+    <ProductGallery product={product} />
+    <ProductDetails product={product} />
+  </Split>
+  <ProductSpecs product={product} />
+</Container>
+
+<style>
+  .product-overview {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.25rem, 3vw, 2rem);
+    padding-top: var(--space-2);
+    padding-bottom: var(--section-space-md);
+  }
+</style>

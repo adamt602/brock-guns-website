@@ -1,0 +1,52 @@
+---
+import { availabilityLabels } from '@/lib/products/productLabels';
+import type { ProductAvailability } from '@/types/product';
+
+/** Availability pill overlaid on a product image. Status is shown by text and a shaped dot. */
+interface Props {
+  availability: ProductAvailability;
+}
+
+const { availability } = Astro.props;
+---
+
+<span class="availability" data-availability={availability}>
+  {availabilityLabels[availability]}
+</span>
+
+<style>
+  .availability {
+    position: absolute;
+    right: var(--space-3);
+    top: var(--space-3);
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: var(--space-1) 0.625rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-border);
+    background: var(--color-white);
+    color: var(--color-text);
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .availability::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-pill);
+    background: var(--color-success);
+  }
+
+  .availability[data-availability='confirm']::before {
+    background: transparent;
+    border: 2px solid var(--color-confirm-dot);
+  }
+
+  .availability[data-availability='sold']::before {
+    background: var(--color-neutral-dot);
+    border-radius: 1px;
+  }
+</style>

@@ -1,0 +1,29 @@
+---
+import { site } from '@/config/site';
+
+/**
+ * Marks content that is still waiting on the business. Visible only while
+ * `site.showPendingContent` is true; renders nothing otherwise.
+ */
+interface Props {
+  note: string;
+}
+
+const { note } = Astro.props;
+---
+
+{site.showPendingContent && <span class="pending">[{note}]</span>}
+
+<style>
+  .pending {
+    padding: 1px 6px;
+    font-size: 0.92em;
+    font-weight: var(--font-weight-medium);
+    color: var(--color-notice-text);
+    background: var(--color-notice-bg);
+    border: 1px dashed var(--color-brass);
+    border-radius: 6px;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+</style>

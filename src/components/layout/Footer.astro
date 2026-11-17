@@ -1,0 +1,114 @@
+---
+import BrandLogo from './BrandLogo.astro';
+import FooterContact from './FooterContact.astro';
+import Container from '@/components/ui/Container.astro';
+import { routes } from '@/config/routes';
+import { business } from '@/data/business';
+import { footerNavigation } from '@/data/navigation';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <Container class="footer__inner">
+    <div class="footer__columns">
+      <div class="footer__brand">
+        <BrandLogo variant="footer" />
+        <p class="footer__tagline">{business.tagline}</p>
+      </div>
+
+      <nav class="footer__nav" aria-label="Footer">
+        <p class="text-eyebrow footer__heading">Explore</p>
+        {footerNavigation.map((item) => (
+          <a class="footer__link" href={item.href}>
+            {item.label}
+          </a>
+        ))}
+      </nav>
+
+      <FooterContact />
+    </div>
+
+    <div class="footer__legal">
+      <span>
+        © {year} {business.legalName}
+      </span>
+      <span>{business.scripture}</span>
+      <a class="footer__link" href={routes.privacy}>
+        Privacy and site information
+      </a>
+    </div>
+  </Container>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-navy);
+    color: var(--color-on-dark-muted);
+  }
+
+  .footer :global(.footer__inner) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10);
+    padding-top: var(--space-14);
+    padding-bottom: var(--space-8);
+  }
+
+  .footer__columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-7);
+  }
+
+  .footer__brand {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .footer__tagline {
+    max-width: 20rem;
+    font-size: var(--text-base);
+  }
+
+  .footer__nav {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .footer__heading {
+    margin-bottom: var(--space-2);
+    color: var(--color-brass-light);
+  }
+
+  .footer__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch-target);
+    color: var(--color-on-dark-link);
+    text-decoration: none;
+  }
+
+  .footer__link:hover {
+    color: var(--color-brass-pale);
+  }
+
+  .footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-1) var(--space-8);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--color-border-on-dark);
+    font-size: var(--text-md);
+  }
+
+  @media (min-width: 700px) {
+    .footer__columns {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-8);
+    }
+  }
+</style>

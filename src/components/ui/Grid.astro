@@ -1,0 +1,38 @@
+---
+/** One column on mobile, `columns` columns from tablet up. */
+interface Props {
+  columns: 2 | 3;
+  as?: 'div' | 'ol' | 'ul';
+  class?: string;
+}
+
+const { columns, as: Element = 'div', class: className, ...rest } = Astro.props;
+---
+
+<Element class:list={['grid', `grid--${columns}`, className]} {...rest}>
+  <slot />
+</Element>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-4);
+  }
+
+  .grid--3 {
+    gap: var(--space-7);
+  }
+
+  @media (min-width: 700px) {
+    .grid--2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-5);
+    }
+
+    .grid--3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-8);
+    }
+  }
+</style>

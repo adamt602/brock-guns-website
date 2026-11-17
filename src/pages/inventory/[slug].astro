@@ -1,0 +1,28 @@
+---
+import type { GetStaticPaths } from 'astro';
+import ProductOverview from '@/components/products/ProductOverview.astro';
+import RelatedProducts from '@/components/products/RelatedProducts.astro';
+import PageLayout from '@/layouts/PageLayout.astro';
+import { conditionLabels } from '@/lib/products/productLabels';
+import { productRepository } from '@/lib/products/productRepository';
+import type { Product } from '@/types/product';
+
+/** One static page per product. */
+export const getStaticPaths = (async () => {
+  const products = await productRepository.listProducts();
+  return products.map((product) => ({ params: { slug: product.slug }, props: { product } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+const relatedProducts = await productRepository.listRelatedProducts(product, 3);
+const description = `${product.name}: ${conditionLabels[product.condition].toLowerCase()} ${product.category.singular.toLowerCase()} listed by Brock Guns and Repair. Call David Johnson to ask about this item.`;
+---
+
+<PageLayout title={product.name} description={description}>
+  <ProductOverview product={product} />
+  <RelatedProducts heading={`More in ${product.category.label}`} products={relatedProducts} />
+</PageLayout>

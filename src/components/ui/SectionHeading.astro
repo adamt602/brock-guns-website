@@ -1,0 +1,74 @@
+---
+/**
+ * The shared heading block: optional eyebrow, heading, optional description.
+ * Used by nearly every section so heading scale stays consistent.
+ */
+interface Props {
+  heading: string;
+  eyebrow?: string;
+  description?: string;
+  /** Heading element. Use h1 once per page. */
+  level?: 'h1' | 'h2';
+  /** Visual size, independent of the element. */
+  size?: 'h1' | 'h2' | 'h3';
+  /** Set the heading in the shop-sign display face. */
+  display?: boolean;
+  tone?: 'light' | 'dark';
+  /** id for the heading, so the section can use aria-labelledby. */
+  id?: string;
+  class?: string;
+}
+
+const {
+  heading,
+  eyebrow,
+  description,
+  level: Heading = 'h2',
+  size = 'h2',
+  display = false,
+  tone = 'light',
+  id,
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<div class:list={['section-heading', `section-heading--${tone}`, className]} {...rest}>
+  {eyebrow && <p class="text-eyebrow section-heading__eyebrow">{eyebrow}</p>}
+  <Heading
+    id={id}
+    class:list={[`text-${size}`, { 'font-display': display }, 'section-heading__title']}
+  >
+    {heading}
+  </Heading>
+  {description && <p class="section-heading__description">{description}</p>}
+</div>
+
+<style>
+  .section-heading {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .section-heading__eyebrow {
+    margin-bottom: var(--space-1);
+    color: var(--color-brass-dark);
+  }
+
+  .section-heading__description {
+    color: var(--color-text-muted);
+  }
+
+  .section-heading--light .font-display {
+    color: var(--color-navy);
+  }
+
+  .section-heading--dark .section-heading__eyebrow {
+    color: var(--color-brass-light);
+  }
+
+  .section-heading--dark .section-heading__description {
+    color: var(--color-on-dark-muted);
+  }
+</style>

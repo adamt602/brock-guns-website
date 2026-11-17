@@ -1,0 +1,36 @@
+---
+import CategoryBrowser from '@/components/home/CategoryBrowser.astro';
+import FeaturedInventory from '@/components/home/FeaturedInventory.astro';
+import HomeHero from '@/components/home/HomeHero.astro';
+import MeetOwnerSection from '@/components/home/MeetOwnerSection.astro';
+import ServicesPreview from '@/components/home/ServicesPreview.astro';
+import ValueProps from '@/components/home/ValueProps.astro';
+import ContactCallout from '@/components/sections/ContactCallout.astro';
+import { site } from '@/config/site';
+import { categoriesAreProvisional } from '@/data/categories';
+import { featuredInventory } from '@/data/home';
+import { services } from '@/data/services';
+import PageLayout from '@/layouts/PageLayout.astro';
+import { productRepository } from '@/lib/products/productRepository';
+
+const featuredProducts = await productRepository.listFeaturedProducts(featuredInventory.limit);
+const categories = await productRepository.listCategories();
+const categoryNote =
+  categoriesAreProvisional && site.showPendingContent
+    ? 'Placeholder categories until the real inventory structure is supplied.'
+    : undefined;
+---
+
+<PageLayout title="Firearm Sales in Texas">
+  <HomeHero />
+  <FeaturedInventory
+    heading={featuredInventory.heading}
+    description={featuredInventory.description}
+    products={featuredProducts}
+  />
+  <CategoryBrowser categories={categories} note={categoryNote} />
+  <ValueProps />
+  <ServicesPreview services={services} />
+  <MeetOwnerSection />
+  <ContactCallout />
+</PageLayout>

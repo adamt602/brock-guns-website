@@ -1,0 +1,42 @@
+---
+import Breadcrumbs, { type Crumb } from '@/components/ui/Breadcrumbs.astro';
+import Section from '@/components/ui/Section.astro';
+
+/**
+ * Navy page header for interior pages: breadcrumbs, h1, lede, and an
+ * optional slot for extra controls (e.g. jump links).
+ */
+interface Props {
+  heading: string;
+  description: string;
+  breadcrumbs: Crumb[];
+}
+
+const { heading, description, breadcrumbs } = Astro.props;
+---
+
+<Section tone="navy" space="none" aria-labelledby="page-heading">
+  <div class="page-hero__inner">
+    <Breadcrumbs items={breadcrumbs} tone="dark" />
+    <h1 id="page-heading" class="text-h1">
+      {heading}
+    </h1>
+    <p class="text-lede page-hero__description">{description}</p>
+    <slot />
+  </div>
+</Section>
+
+<style>
+  .page-hero__inner {
+    padding-block: clamp(2rem, 5vw, 4rem);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.875rem;
+  }
+
+  .page-hero__description {
+    max-width: 38.75rem;
+    color: var(--color-on-dark-muted);
+  }
+</style>

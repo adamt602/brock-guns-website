@@ -1,0 +1,22 @@
+---
+import ContactCallout from '@/components/sections/ContactCallout.astro';
+import GettingStarted from '@/components/services/GettingStarted.astro';
+import InventoryPromo from '@/components/services/InventoryPromo.astro';
+import ServiceDetail from '@/components/services/ServiceDetail.astro';
+import ServicesHero from '@/components/services/ServicesHero.astro';
+import { gettingStartedSteps, services, unconfirmedServices } from '@/data/services';
+import PageLayout from '@/layouts/PageLayout.astro';
+---
+
+<PageLayout
+  title="Gunsmithing & Repairs"
+  description="Gunsmithing and firearm repair services from Brock Guns and Repair in Texas. Call David Johnson and describe what you need."
+>
+  <ServicesHero services={services} />
+  <InventoryPromo />
+  {services.map((service, index) => (
+    <ServiceDetail service={service} alternate={index % 2 === 1} />
+  ))}
+  <GettingStarted steps={gettingStartedSteps} unconfirmed={unconfirmedServices} />
+  <ContactCallout />
+</PageLayout>

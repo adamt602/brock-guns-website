@@ -1,0 +1,26 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+/** Multi-line text input. Pair with FormField for the label and error. */
+interface Props extends HTMLAttributes<'textarea'> {
+  id: string;
+  hasError?: boolean;
+}
+
+const { id, hasError = false, rows = 6, class: className, ...rest } = Astro.props;
+---
+
+<textarea
+  id={id}
+  rows={rows}
+  class:list={['control', 'textarea', className]}
+  aria-describedby={hasError ? `${id}-error` : undefined}
+  {...rest}
+></textarea>
+
+<style>
+  .textarea {
+    min-height: 9.375rem;
+    resize: vertical;
+  }
+</style>

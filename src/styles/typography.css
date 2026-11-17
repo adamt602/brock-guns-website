@@ -1,0 +1,74 @@
+/*
+ * Shared type styles. Components opt in with these classes so that heading
+ * scale and rhythm are defined once.
+ */
+.font-display {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-regular);
+}
+
+.text-eyebrow {
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+}
+
+.text-h1 {
+  font-size: var(--text-h1);
+  line-height: 1.08;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.text-h2 {
+  font-size: var(--text-h2);
+  line-height: var(--leading-tight);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-heading);
+  text-wrap: balance;
+}
+
+.text-h3 {
+  font-size: var(--text-h3);
+  line-height: 1.15;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.02em;
+}
+
+.text-title {
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.015em;
+}
+
+/* Display (shop-sign) variants are lighter and looser than the sans headings. */
+.font-display.text-h1,
+.font-display.text-h2,
+.font-display.text-hero {
+  font-weight: var(--font-weight-regular);
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+
+.font-display.text-h1 {
+  font-size: var(--text-display-h1);
+}
+
+.font-display.text-h2 {
+  font-size: var(--text-display-h2);
+}
+
+.font-display.text-hero {
+  font-size: var(--text-display-hero);
+  line-height: var(--leading-tight);
+  text-wrap: balance;
+}
+
+.text-lede {
+  font-size: var(--text-lede);
+  line-height: 1.5;
+}

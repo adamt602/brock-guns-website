@@ -1,0 +1,53 @@
+---
+import PageHero from '@/components/sections/PageHero.astro';
+import Pending from '@/components/ui/Pending.astro';
+import Prose from '@/components/ui/Prose.astro';
+import Section from '@/components/ui/Section.astro';
+import { routes } from '@/config/routes';
+import { business, phoneHref } from '@/data/business';
+import PageLayout from '@/layouts/PageLayout.astro';
+---
+
+<PageLayout
+  title="Privacy and Site Information"
+  description="How the Brock Guns and Repair website works and what information it handles."
+>
+  <PageHero
+    heading="Privacy and Site Information"
+    description="How this website works and what it does with information."
+    breadcrumbs={[{ label: 'Home', href: routes.home }, { label: 'Privacy' }]}
+  />
+  <Section tone="ivory" space="md">
+    <Prose>
+      <h2>About this website</h2>
+      <p>
+        This website is an informational catalog for {business.legalName}. It does not process
+        purchases and there is no online checkout. To ask about an item or a service, call
+        {business.owner.name} at <a href={phoneHref}>{business.phone.display}</a>.
+      </p>
+
+      <h2>Inventory information</h2>
+      <p>
+        Listings marked “Demo listing” are demonstration content. They are not real inventory,
+        pricing, or availability. Always confirm details directly with {business.owner.firstName}.
+      </p>
+
+      <h2>Information this site handles</h2>
+      <ul>
+        <li>The site does not ask you to create an account.</li>
+        <li>As built, the site does not set advertising or analytics cookies.</li>
+        <li>
+          Anything you type into the contact form is used only to respond to your message.{' '}
+          <Pending note="PRIVACY NOTE: how messages are stored and handled, to be confirmed before launch." />
+        </li>
+      </ul>
+
+      <h2>Questions</h2>
+      <p>
+        Questions about this website can be directed to {business.owner.name} at
+        <a href={phoneHref}>{business.phone.display}</a>.{' '}
+        <Pending note="FULL PRIVACY POLICY: to be reviewed and approved before launch." />
+      </p>
+    </Prose>
+  </Section>
+</PageLayout>

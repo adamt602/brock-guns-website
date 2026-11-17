@@ -1,0 +1,39 @@
+---
+/**
+ * Lays out a row of actions. On narrow screens the buttons share the width
+ * equally; from tablet up they take their natural size.
+ */
+interface Props {
+  align?: 'start' | 'center';
+  class?: string;
+}
+
+const { align = 'start', class: className, ...rest } = Astro.props;
+---
+
+<div class:list={['button-group', `button-group--${align}`, className]} {...rest}>
+  <slot />
+</div>
+
+<style>
+  .button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    width: 100%;
+  }
+
+  .button-group--center {
+    justify-content: center;
+  }
+
+  .button-group > :global(*) {
+    flex: 1 1 9.375rem;
+  }
+
+  @media (min-width: 700px) {
+    .button-group > :global(*) {
+      flex: 0 0 auto;
+    }
+  }
+</style>

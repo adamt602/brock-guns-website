@@ -1,0 +1,80 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { quality } from '@/data/about';
+
+/** "Commitment to quality": heading beside a checklist of commitments. */
+---
+
+<Section tone="stone" aria-labelledby="quality-heading">
+  <div class="brand-values">
+    <SectionHeading
+      class="brand-values__heading"
+      id="quality-heading"
+      eyebrow={quality.eyebrow}
+      heading={quality.heading}
+    />
+    <ul class="brand-values__list">
+      {quality.commitments.map((commitment) => (
+        <li class="brand-values__item">
+          <span class="brand-values__check">
+            <Icon name="check" size={22} />
+          </span>
+          <span>
+            <strong class="text-title brand-values__title">{commitment.title}</strong>
+            <span class="brand-values__description">{commitment.description}</span>
+          </span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</Section>
+
+<style>
+  .brand-values {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: clamp(1.75rem, 5vw, 5rem);
+  }
+
+  .brand-values .brand-values__heading {
+    flex: 1 1 23.75rem;
+    min-width: 0;
+    gap: 0.625rem;
+  }
+
+  .brand-values :global(.section-heading__title) {
+    color: var(--color-navy);
+  }
+
+  .brand-values__list {
+    flex: 1.2 1 25rem;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid var(--color-border-strong);
+  }
+
+  .brand-values__item {
+    display: flex;
+    gap: 0.875rem;
+    padding: 1.125rem 0;
+    border-top: 1px solid var(--color-border-strong);
+  }
+
+  .brand-values__check {
+    flex: none;
+    padding-top: 3px;
+    color: var(--color-navy);
+  }
+
+  .brand-values__title {
+    display: block;
+  }
+
+  .brand-values__description {
+    color: var(--color-text-soft);
+  }
+</style>

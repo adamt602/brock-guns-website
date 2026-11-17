@@ -1,0 +1,51 @@
+---
+/** A small status or attribute label. */
+interface Props {
+  tone?: 'neutral' | 'available' | 'confirm' | 'sold' | 'pending';
+  class?: string;
+}
+
+const { tone = 'neutral', class: className, ...rest } = Astro.props;
+---
+
+<span class:list={['badge', `badge--${tone}`, className]} {...rest}>
+  <slot />
+</span>
+
+<style>
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.75rem;
+    padding: 0.125rem 0.75rem;
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-border-strong);
+    background: var(--color-white);
+    color: var(--color-text);
+  }
+
+  .badge--available {
+    background: var(--color-success-bg);
+    color: var(--color-success-text);
+    border-color: var(--color-success-border);
+  }
+
+  .badge--confirm {
+    background: var(--color-notice-bg);
+    color: var(--color-notice-text);
+    border-color: var(--color-notice-border);
+  }
+
+  .badge--sold {
+    background: var(--color-surface-disabled);
+    color: var(--color-text-soft);
+  }
+
+  .badge--pending {
+    background: transparent;
+    color: var(--color-notice-text);
+    border: 1px dashed var(--color-brass);
+  }
+</style>

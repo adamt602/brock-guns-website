@@ -1,0 +1,43 @@
+---
+/** A short titled statement under a brass rule (value props, process steps). */
+interface Props {
+  title: string;
+  description: string;
+  /** Small label above the title, e.g. "Step 1". */
+  kicker?: string;
+  tone?: 'light' | 'dark';
+  as?: 'div' | 'li';
+}
+
+const { title, description, kicker, tone = 'light', as: Element = 'div' } = Astro.props;
+---
+
+<Element class:list={['ruled-feature', `ruled-feature--${tone}`]}>
+  {kicker && <span class="ruled-feature__kicker">{kicker}</span>}
+  <h3 class="text-title">{title}</h3>
+  <p class="ruled-feature__description">{description}</p>
+</Element>
+
+<style>
+  .ruled-feature {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-top: 1.125rem;
+    border-top: 1px solid var(--color-brass);
+  }
+
+  .ruled-feature__kicker {
+    font-size: var(--text-base-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-brass-dark);
+  }
+
+  .ruled-feature__description {
+    color: var(--color-text-muted);
+  }
+
+  .ruled-feature--dark .ruled-feature__description {
+    color: var(--color-on-dark-muted);
+  }
+</style>

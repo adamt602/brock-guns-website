@@ -1,0 +1,87 @@
+---
+import ProductGrid from '@/components/products/ProductGrid.astro';
+import Button from '@/components/ui/Button.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import TextLink from '@/components/ui/TextLink.astro';
+import { routes } from '@/config/routes';
+import type { Product } from '@/types/product';
+
+/** Homepage inventory showcase. Receives the products to feature as props. */
+interface Props {
+  heading: string;
+  description: string;
+  products: Product[];
+}
+
+const { heading, description, products } = Astro.props;
+const hasDemoListings = products.some((product) => product.isDemo);
+---
+
+<Section tone="ivory" space="none" aria-labelledby="featured-heading">
+  <div class="featured">
+    <div class="featured__header">
+      <SectionHeading id="featured-heading" heading={heading} description={description} />
+      <TextLink class="featured__link" href={routes.inventory} iconEnd="arrow-right">
+        View All Inventory
+      </TextLink>
+    </div>
+
+    <ProductGrid products={products} layout="carousel" />
+
+    <div class="featured__footer">
+      <Button class="featured__button" href={routes.inventory}>
+        View All Inventory
+      </Button>
+      {hasDemoListings && (
+        <p class="featured__disclaimer">
+          Demonstration listings for design purposes. Not actual inventory, pricing, or
+          availability.
+        </p>
+      )}
+    </div>
+  </div>
+</Section>
+
+<style>
+  .featured {
+    padding-block: clamp(2.75rem, 7vw, 6rem);
+  }
+
+  .featured__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-8);
+    margin-bottom: var(--space-5);
+  }
+
+  /* Doubled selectors outrank the child component's own display value. */
+  .featured .featured__link {
+    display: none;
+  }
+
+  .featured__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    padding-top: var(--space-2);
+  }
+
+  .featured__disclaimer {
+    font-size: var(--text-md);
+    color: var(--color-text-muted);
+  }
+
+  /* From tablet up the heading-row link replaces the full-width button. */
+  @media (min-width: 700px) {
+    .featured .featured__link {
+      display: inline-flex;
+    }
+
+    .featured .featured__button {
+      display: none;
+    }
+  }
+</style>

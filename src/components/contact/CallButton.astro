@@ -1,0 +1,17 @@
+---
+import Button from '@/components/ui/Button.astro';
+import { business, phoneHref } from '@/data/business';
+
+/** "Call David" button. The number comes from business data. */
+interface Props {
+  variant?: 'primary' | 'light' | 'outline' | 'outline-light';
+  /** Override the default "Call David" label. */
+  label?: string;
+}
+
+const { variant = 'outline', label = `Call ${business.owner.firstName}` } = Astro.props;
+---
+
+<Button variant={variant} href={phoneHref} iconStart="phone">
+  {label}
+</Button>

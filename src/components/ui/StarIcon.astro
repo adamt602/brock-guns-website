@@ -1,0 +1,12 @@
+---
+/** The filled Texas star used as a small decorative accent. */
+interface Props {
+  size?: number;
+}
+
+const { size = 14 } = Astro.props;
+---
+
+<svg aria-hidden="true" width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+  <path d="M12 2l2.9 6.6 7.1.7-5.4 4.7 1.6 7-6.2-3.7L5.8 21l1.6-7L2 9.3l7.1-.7z"></path>
+</svg>

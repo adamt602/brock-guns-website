@@ -1,0 +1,81 @@
+---
+import ActiveFilters from './ActiveFilters.astro';
+import CategoryChips from './CategoryChips.astro';
+import FilterSheet from './FilterSheet.astro';
+import InventoryPageHeader from './InventoryPageHeader.astro';
+import InventoryRequestCallout from './InventoryRequestCallout.astro';
+import ProductFilters from './ProductFilters.astro';
+import ProductGrid from './ProductGrid.astro';
+import CallButton from '@/components/contact/CallButton.astro';
+import Button from '@/components/ui/Button.astro';
+import ButtonGroup from '@/components/ui/ButtonGroup.astro';
+import Container from '@/components/ui/Container.astro';
+import EmptyState from '@/components/ui/EmptyState.astro';
+import { availabilityLabels, conditionLabels } from '@/lib/products/productLabels';
+import type { Category, Product } from '@/types/product';
+
+/**
+ * The browsable catalog: search, category chips, filters, sort and results.
+ * All products are rendered as static HTML; `inventoryFilters.ts` then shows,
+ * hides and reorders them in the browser. Without JavaScript the full list
+ * is still readable.
+ */
+interface Props {
+  products: Product[];
+  categories: Category[];
+}
+
+const { products, categories } = Astro.props;
+
+/** Labels the filter script needs for the removable "active filter" chips. */
+const labels = {
+  category: Object.fromEntries(categories.map((category) => [category.id, category.label])),
+  condition: conditionLabels,
+  availability: availabilityLabels,
+};
+---
+
+<div class="inventory" data-inventory data-labels={JSON.stringify(labels)}>
+  <InventoryPageHeader showDemoNotice={products.some((product) => product.isDemo)} />
+  <CategoryChips categories={categories} />
+
+  <Container class="inventory__results">
+    <ProductFilters total={products.length} />
+    <ActiveFilters />
+    <ProductGrid products={products} headingLevel="h2" data-product-list />
+
+    <EmptyState
+      heading="No matching items"
+      description="Try a different category or clear your filters. If you are after something specific, David may be able to help."
+      data-empty-state
+      hidden
+    >
+      <ButtonGroup align="center">
+        <Button data-filter-clear>Clear Filters</Button>
+        <CallButton />
+      </ButtonGroup>
+    </EmptyState>
+
+    <InventoryRequestCallout />
+  </Container>
+
+  <FilterSheet categories={categories} />
+</div>
+
+<script>
+  import { initInventoryFilters } from '@/scripts/inventoryFilters';
+  initInventoryFilters();
+</script>
+
+<style>
+  .inventory {
+    background: var(--color-ivory);
+  }
+
+  .inventory :global(.inventory__results) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    padding-bottom: var(--section-space-md);
+  }
+</style>

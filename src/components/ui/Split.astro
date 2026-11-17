@@ -1,0 +1,68 @@
+---
+/**
+ * Two-part layout: stacked on mobile, side by side from tablet up.
+ * Put exactly two children in the slot.
+ */
+interface Props {
+  /** Swap the visual order on wide screens (second child on the left). */
+  reverse?: boolean;
+  align?: 'center' | 'start';
+  /** media-wide gives the first child a little more room. */
+  ratio?: 'equal' | 'media-wide';
+  class?: string;
+}
+
+const {
+  reverse = false,
+  align = 'center',
+  ratio = 'equal',
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    'split',
+    `split--${align}`,
+    `split--${ratio}`,
+    { 'split--reverse': reverse },
+    className,
+  ]}
+  {...rest}
+>
+  <slot />
+</div>
+
+<style>
+  .split {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-7);
+  }
+
+  @media (min-width: 700px) {
+    .split {
+      flex-direction: row;
+      align-items: center;
+      gap: clamp(2rem, 5vw, 5rem);
+    }
+
+    .split--start {
+      align-items: flex-start;
+    }
+
+    .split--reverse {
+      flex-direction: row-reverse;
+    }
+
+    .split > :global(*) {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .split--media-wide > :global(:first-child) {
+      flex-grow: 1.25;
+    }
+  }
+</style>

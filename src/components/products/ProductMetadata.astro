@@ -1,0 +1,67 @@
+---
+import { productRoute } from '@/config/routes';
+import { conditionLabels } from '@/lib/products/productLabels';
+import type { Product } from '@/types/product';
+
+/** Manufacturer, linked product name, and category · condition line. */
+interface Props {
+  product: Product;
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { product, headingLevel: Heading = 'h3' } = Astro.props;
+---
+
+<span class="product-meta__brand">{product.manufacturer}</span>
+<Heading class="product-meta__name">
+  <a class="product-meta__link" href={productRoute(product.slug)}>
+    {product.name}
+  </a>
+</Heading>
+<span class="product-meta__detail">
+  {product.category.label} · {conditionLabels[product.condition]}
+</span>
+
+<style>
+  .product-meta__brand {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .product-meta__name {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    font-size: 1.1875rem;
+    line-height: var(--leading-snug);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: -0.015em;
+  }
+
+  .product-meta__link {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  /* Stretch the link over the whole card so the card is one large target. */
+  .product-meta__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .product-meta__link:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+
+  .product-meta__detail {
+    font-size: var(--text-base-sm);
+    color: var(--color-text-muted);
+  }
+</style>

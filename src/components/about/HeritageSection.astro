@@ -1,0 +1,67 @@
+---
+import Photo from '@/components/ui/Photo.astro';
+import Section from '@/components/ui/Section.astro';
+import StarIcon from '@/components/ui/StarIcon.astro';
+import { heritage } from '@/data/about';
+
+/** "Texas heritage": the story behind the shop-sign lettering. */
+---
+
+<Section tone="navy" aria-labelledby="heritage-heading">
+  <div class="heritage">
+    <Photo class="heritage__photo" label="Photograph" brief={heritage.imageBrief} tone="dark" />
+    <div class="heritage__content">
+      <p class="heritage__eyebrow">
+        <StarIcon />
+        <span class="text-eyebrow">{heritage.eyebrow}</span>
+      </p>
+      <h2 id="heritage-heading" class="font-display text-h2">
+        {heritage.heading}
+      </h2>
+      <p class="heritage__lede">{heritage.lede}</p>
+      <p class="heritage__body">{heritage.body}</p>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .heritage {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: clamp(2.25rem, 5vw, 5rem);
+  }
+
+  .heritage .heritage__photo {
+    flex: 1 1 25rem;
+    min-width: 0;
+    width: auto;
+    height: clamp(15rem, 26vw, 22.5rem);
+    border: 1px solid var(--color-brass);
+  }
+
+  .heritage__content {
+    flex: 1 1 25rem;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.125rem;
+  }
+
+  .heritage__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--color-brass-light);
+  }
+
+  .heritage__lede {
+    font-size: var(--text-lg);
+    color: var(--color-on-dark-muted);
+  }
+
+  .heritage__body {
+    color: var(--color-on-dark-soft);
+  }
+</style>

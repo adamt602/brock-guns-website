@@ -1,0 +1,58 @@
+---
+import { routes } from '@/config/routes';
+import { business, businessName } from '@/data/business';
+
+/** The wordmark, set in the shop-sign display face. */
+interface Props {
+  /** header: compact home link · footer: larger, not a link */
+  variant?: 'header' | 'footer';
+}
+
+const { variant = 'header' } = Astro.props;
+const { primary, secondary } = business.wordmark;
+---
+
+{variant === 'header' ? (
+  <a
+    class="brand-logo brand-logo--header font-display"
+    href={routes.home}
+    aria-label={`${businessName}, home`}
+  >
+    {primary}&nbsp;<span class="brand-logo__ampersand">&amp;</span>&nbsp;{secondary}
+  </a>
+) : (
+  <span class="brand-logo brand-logo--footer font-display">
+    {primary} <span class="brand-logo__ampersand">&amp;</span> {secondary}
+  </span>
+)}
+
+<style>
+  .brand-logo {
+    color: var(--color-white);
+    letter-spacing: 0.02em;
+  }
+
+  .brand-logo--header {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    min-height: var(--touch-target);
+    font-size: clamp(1rem, 0.6vw + 0.84375rem, 1.3125rem);
+    white-space: nowrap;
+    text-decoration: none;
+  }
+
+  .brand-logo--header:hover {
+    color: var(--color-white);
+  }
+
+  .brand-logo--footer {
+    font-size: var(--text-2xl);
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+  }
+
+  .brand-logo__ampersand {
+    color: var(--color-brass-light);
+  }
+</style>
