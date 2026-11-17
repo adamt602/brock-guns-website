@@ -13,17 +13,18 @@ npm install
 npm run dev        # development server at http://localhost:4321
 ```
 
-| Command                | What it does                                                        |
-| ---------------------- | ------------------------------------------------------------------- |
-| `npm run dev`          | Start the dev server with hot reload                                |
-| `npm run build`        | Build the static site into `dist/`                                  |
-| `npm run preview`      | Serve the built site locally                                        |
-| `npm run check`        | Type-check `.astro` and `.ts` files (`astro check`)                 |
-| `npm run lint`         | ESLint (TypeScript, Astro, and accessibility rules)                 |
-| `npm run format`       | Format everything with Prettier                                     |
-| `npm run format:check` | Verify formatting without changing files                            |
-| `npm run test:links`   | Check every internal link and anchor in `dist/` (run after a build) |
-| `npm run verify`       | All of the above checks plus a build, in one command                |
+| Command                | What it does                                                                                                                       |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run dev`          | Start the dev server with hot reload                                                                                               |
+| `npm run build`        | Build the static site into `dist/`                                                                                                 |
+| `npm run preview`      | Serve the built site locally                                                                                                       |
+| `npm run check`        | Type-check `.astro` and `.ts` files (`astro check`)                                                                                |
+| `npm run lint`         | ESLint (TypeScript, Astro, and accessibility rules)                                                                                |
+| `npm run format`       | Format everything with Prettier                                                                                                    |
+| `npm run format:check` | Verify formatting without changing files                                                                                           |
+| `npm run test:links`   | Check every internal link and anchor in `dist/` (run after a build)                                                                |
+| `npm run test:layout`  | Check the product-card layout in a real browser at eight widths (run after a build; first time: `npx playwright install chromium`) |
+| `npm run verify`       | All of the above checks plus a build, in one command                                                                               |
 
 Optional environment variables are documented in `.env.example`.
 
@@ -107,7 +108,7 @@ Rules followed throughout:
 - One responsibility per file. Props are typed with an `interface Props` and documented where not obvious.
 - A component styles only its own markup. When a parent must size or place a child component, it passes a `class` (every primitive forwards `class` and extra attributes to its root element).
 - Layout decisions belong to the component that owns the layout: `ProductGrid` owns columns, `ProductCard` owns the card, `Header` owns the mobile/desktop switch.
-- Responsive rules are mobile-first (`min-width` media queries) and sit next to the styles they change. Breakpoints are content-driven: 430, 700, 900 and 1150px.
+- Responsive rules are mobile-first (`min-width` media queries) and sit next to the styles they change. Breakpoints are content-driven: 600, 700, 900 and 1150px.
 - `<a>` for navigation, `<button>` for actions. `Button`, `Chip`, `TextLink` and `IconButton` pick the right element automatically: pass `href` and you get a link.
 
 ## Common changes

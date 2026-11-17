@@ -104,6 +104,11 @@ const { product, headingLevel = 'h3' } = Astro.props;
     padding-top: var(--space-3);
   }
 
+  .product-card__price,
+  .product-card__action {
+    white-space: nowrap;
+  }
+
   .product-card__price {
     font-size: var(--text-body);
     font-weight: var(--font-weight-semibold);

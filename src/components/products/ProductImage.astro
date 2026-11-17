@@ -5,7 +5,14 @@ import type { ProductImage } from '@/types/product';
 
 /**
  * The 4:3 image well for a product. Shows the photo when one exists and a
- * neutral placeholder when it does not. Overlays (tags, badges) go in the slot.
+ * neutral placeholder when it does not.
+ *
+ * Tags and badges go in the slot. They are laid out together in one row across
+ * the top of the image that wraps when space is tight, so they cannot overlap
+ * at any width. On narrow cards they shrink slightly (via `--badge-font-size`
+ * and `--badge-padding-inline`) so both still fit side by side.
+ *
+ * The shape is 4:3 unless a parent sets `--product-image-ratio`.
  */
 interface Props {
   image?: ProductImage;
@@ -21,7 +28,7 @@ interface Props {
 const {
   image,
   caption,
-  sizes = '(min-width: 1150px) 25vw, (min-width: 900px) 33vw, (min-width: 430px) 50vw, 100vw',
+  sizes = '(min-width: 1150px) 25vw, (min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw',
   framed = false,
   class: className,
   ...rest
@@ -29,7 +36,11 @@ const {
 ---
 
 <div class:list={['product-image', { 'product-image--framed': framed }, className]} {...rest}>
-  <slot />
+  {Astro.slots.has('default') && (
+    <div class="product-image__badges">
+      <slot />
+    </div>
+  )}
   {image ? (
     typeof image.src === 'string' ? (
       <img
@@ -63,10 +74,32 @@ const {
     display: flex;
     align-items: center;
     justify-content: center;
-    aspect-ratio: 4 / 3;
+    container-type: inline-size;
+    aspect-ratio: var(--product-image-ratio, 4 / 3);
     overflow: hidden;
     background: var(--color-surface-media);
     color: var(--color-text-muted);
+  }
+
+  .product-image__badges {
+    position: absolute;
+    inset: var(--space-3) var(--space-3) auto;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+
+  /* On narrow cards the badges tighten up so both still fit on one row. */
+  @container (max-width: 17.5rem) {
+    .product-image__badges {
+      --badge-font-size: 0.6875rem;
+      --badge-padding-inline: var(--space-2);
+      inset: 0.625rem 0.625rem auto;
+      gap: 0.375rem;
+    }
   }
 
   .product-image--framed {

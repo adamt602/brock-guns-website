@@ -1,21 +1,22 @@
 ---
-/** Marks a listing as demonstration data. Shown wherever a demo product appears. */
+/**
+ * Marks a listing as demonstration data. Shown wherever a demo product appears.
+ * Place it in ProductImage's slot, which positions it over the image.
+ */
 ---
 
 <span class="demo-tag">Demo listing</span>
 
 <style>
   .demo-tag {
-    position: absolute;
-    left: var(--space-3);
-    top: var(--space-3);
-    z-index: 1;
-    padding: var(--space-1) 0.625rem;
+    flex: none;
+    padding: var(--space-1) var(--badge-padding-inline, 0.625rem);
     border-radius: var(--radius-pill);
     background: rgb(20 35 52 / 0.88);
     color: var(--color-white);
-    font-size: var(--text-xs);
+    font-size: var(--badge-font-size, var(--text-xs));
     font-weight: var(--font-weight-semibold);
     letter-spacing: 0.02em;
+    white-space: nowrap;
   }
 </style>

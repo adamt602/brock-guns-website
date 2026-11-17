@@ -34,8 +34,9 @@ const { product, headingLevel: Heading = 'h3' } = Astro.props;
   .product-meta__name {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
+    /* Two lines by default; a parent layout may lift the limit. */
+    -webkit-line-clamp: var(--product-name-lines, 2);
+    line-clamp: var(--product-name-lines, 2);
     overflow: hidden;
     font-size: 1.1875rem;
     line-height: var(--leading-snug);

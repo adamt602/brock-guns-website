@@ -12,6 +12,8 @@ export default defineConfig(
   astro.configs['jsx-a11y-recommended'],
   {
     files: ['scripts/**/*.mjs', '*.config.{js,mjs}'],
-    languageOptions: { globals: { process: 'readonly', console: 'readonly', URL: 'readonly' } },
+    languageOptions: {
+      globals: { process: 'readonly', console: 'readonly', URL: 'readonly', document: 'readonly' },
+    },
   },
 );

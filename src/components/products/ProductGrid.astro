@@ -5,7 +5,8 @@ import type { Product } from '@/types/product';
 /**
  * Lays out product cards. It receives products as props and never loads data.
  *
- * grid: the catalog grid (1 → 2 → 3 → 4 columns).
+ * grid: the catalog grid. One large card per row on phones (wider 3:2 photo,
+ *   full product name), then 2, 3 and 4 columns as space allows.
  * carousel: a swipeable row on phones that becomes a 2/3-column grid on
  *   larger screens. Place it inside a Container; on phones it bleeds to the
  *   screen edges so cards can scroll under the page gutter.
@@ -47,6 +48,15 @@ const { products, layout = 'grid', headingLevel = 'h3', class: className, ...res
     gap: var(--space-4);
   }
 
+  /* Single-column phone layout: a wider photo so the next card peeks into
+     view, and room for the whole product name. */
+  @media (max-width: 599.98px) {
+    .product-grid--grid {
+      --product-image-ratio: 3 / 2;
+      --product-name-lines: none;
+    }
+  }
+
   .product-grid--carousel {
     display: flex;
     gap: 0.875rem;
@@ -67,7 +77,7 @@ const { products, layout = 'grid', headingLevel = 'h3', class: className, ...res
     scroll-snap-align: start;
   }
 
-  @media (min-width: 430px) {
+  @media (min-width: 600px) {
     .product-grid--grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
